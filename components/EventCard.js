@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
-import { Button, Image, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const EventCard = () => {
-    const [buttonState, setButtonState] = useState(false);
+
+const EventCard = ({ data }) => {
+
+    const [buttonState, setButtonState] = useState(data.isLiked);
 
     let buttonColor
     let buttonType
     if (buttonState) {
-        buttonColor = 'red';
+        buttonColor = '#fff';
         buttonType = 'heart'
     } else {
         buttonColor = '#fff';
@@ -20,23 +22,24 @@ const EventCard = () => {
             <View style={styles.cardTop}>
                 <Image
                     style={styles.image}
-                    source={{ uri: 'https://images.unsplash.com/photo-1506157786151-b8491531f063?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80' }}
+                    source={{ uri: data.poster }}
                 />
                 <Pressable style={styles.likeButton} onPress={() => setButtonState(!buttonState)}>
-                    <Ionicons name={buttonType} size={20} color={buttonColor} />
+                    <Ionicons name={buttonType} size={22} color={buttonColor} />
                 </Pressable>
-
+                <Text style={styles.date}>17 Aug</Text>
             </View>
             <View style={styles.cardBottom}>
-                <Text style={styles.title}>Lorem Concert</Text>
+                <Text style={styles.title}>{data.title}</Text>
                 <Pressable style={styles.eventTypeButton}>
-                    <Text style={styles.eventTypeText} >Music</Text>
+                    <Text style={styles.eventTypeText} >{data.eventType}</Text>
                 </Pressable>
-                <Text style={styles.address}>2920 Zoo Dr, Brookyn, NY 11225</Text>
+                <Text style={styles.address}>{data.address}</Text>
             </View>
         </View>
     )
 }
+
 
 export default EventCard
 
@@ -49,7 +52,8 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         elevation: 2,
         shadowRadius: 1,
-        elevation: 5
+        elevation: 5,
+        margin: 2
     },
     cardTop: {
         height: '65%'
@@ -62,8 +66,26 @@ const styles = StyleSheet.create({
     },
     likeButton: {
         position: 'absolute',
-        left: 10,
-        top: 10
+        left: 0,
+        top: 0,
+        width: 50,
+        height: 50,
+        padding: 8,
+    },
+    date: {
+        position: 'absolute',
+        right: 10,
+        top: 10,
+        width: 60,
+        height: 20,
+        fontSize: 14,
+        color: '#333',
+        borderWidth: 1,
+        borderColor: '#fff',
+        borderRadius: 5,
+        textAlign: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#f1f1f1'
     },
     cardBottom: {
         backgroundColor: '#fff',
