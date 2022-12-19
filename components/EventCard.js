@@ -34,7 +34,7 @@ const EventCard = ({ data }) => {
                 <Pressable style={styles.eventTypeButton}>
                     <Text style={styles.eventTypeText} >{data.eventType}</Text>
                 </Pressable>
-                <Text style={styles.address}>{data.address}</Text>
+                <Text style={styles.address}><Ionicons name='location' size={10} />{data.address}</Text>
             </View>
         </TouchableOpacity>
     )
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         width: 200,
         height: 220,
         borderWidth: 1,
-        borderColor: 'lightgrey',
+        borderColor: '#E9EBED',
         borderRadius: 12,
         elevation: 2,
         shadowRadius: 1,
