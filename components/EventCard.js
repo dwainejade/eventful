@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
@@ -18,7 +18,7 @@ const EventCard = ({ data }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={styles.container}>
             <View style={styles.cardTop}>
                 <Image
                     style={styles.image}
@@ -36,7 +36,7 @@ const EventCard = ({ data }) => {
                 </Pressable>
                 <Text style={styles.address}>{data.address}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
         elevation: 2,
         shadowRadius: 1,
         elevation: 5,
-        margin: 2
+        margin: 2,
+        marginHorizontal: 8
     },
     cardTop: {
         height: '65%'
