@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
@@ -18,7 +18,7 @@ const EventCard = ({ data }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={styles.container}>
             <View style={styles.cardTop}>
                 <Image
                     style={styles.image}
@@ -34,9 +34,9 @@ const EventCard = ({ data }) => {
                 <Pressable style={styles.eventTypeButton}>
                     <Text style={styles.eventTypeText} >{data.eventType}</Text>
                 </Pressable>
-                <Text style={styles.address}>{data.address}</Text>
+                <Text style={styles.address}><Ionicons name='location' size={10} />{data.address}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
@@ -48,12 +48,13 @@ const styles = StyleSheet.create({
         width: 200,
         height: 220,
         borderWidth: 1,
-        borderColor: 'lightgrey',
+        borderColor: '#E9EBED',
         borderRadius: 12,
         elevation: 2,
         shadowRadius: 1,
         elevation: 5,
-        margin: 2
+        margin: 2,
+        marginHorizontal: 8
     },
     cardTop: {
         height: '65%'
@@ -80,12 +81,12 @@ const styles = StyleSheet.create({
         height: 20,
         fontSize: 14,
         color: '#333',
-        borderWidth: 1,
-        borderColor: '#fff',
         borderRadius: 5,
         textAlign: 'center',
         justifyContent: 'center',
-        backgroundColor: '#f1f1f1'
+        backgroundColor: '#f1f1f1',
+        overflow: 'hidden',
+        padding: 1
     },
     cardBottom: {
         backgroundColor: '#fff',
