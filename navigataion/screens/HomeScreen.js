@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import * as React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import EventCard from '../../components/EventCard';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -6,7 +6,7 @@ import FeaturedEventCard from '../../components/FeaturedEventCard';
 
 const data = require('../../data/MOCK_DATA.json');
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
@@ -16,7 +16,7 @@ const HomeScreen = () => {
                     <TextInput style={styles.searchBar} >
                         <Ionicons name='search' size={15} />
                     </TextInput>
-                    <TouchableOpacity style={styles.locationButton}>
+                    <TouchableOpacity style={styles.locationButton} >
                         <Ionicons style={styles.locationIcon} name='location' size={20} />
                     </TouchableOpacity>
                 </View>
@@ -38,10 +38,12 @@ const HomeScreen = () => {
                     showsHorizontalScrollIndicator={false}
                 >
                     {data.map((item) => (
-                        <EventCard
-                            data={item}
-                            key={item.id}
-                        />
+                        <TouchableOpacity key={item.id} onPress={() => navigation.navigate('EventDetails')}>
+                            <EventCard
+                                data={item}
+                            />
+                        </TouchableOpacity>
+
                     )
                     )}
                 </ScrollView>
@@ -56,10 +58,11 @@ const HomeScreen = () => {
                 >
                     {
                         data.map((item) => (
-                            <EventCard
-                                data={item}
-                                key={item.id}
-                            />
+                            <TouchableOpacity key={item.id} onPress={() => navigation.navigate('EventDetails')}>
+                                <EventCard
+                                    data={item}
+                                />
+                            </TouchableOpacity>
                         )
                         )}
                 </ScrollView>

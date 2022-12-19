@@ -4,13 +4,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 //screens
-import HomeScreen from './screens/HomeScreen';
-import LoginScreen from './screens/LoginScreen';
+import HomeStack from './HomeStack';
 import MyTicketsScreen from './screens/MyTicketsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 
 // screen names
-const homeName = 'Home';
+const homeName = 'HomeStack';
 const profileName = 'Profile';
 const ticketsName = 'Tickets';
 
@@ -45,10 +44,11 @@ export default function MainContainer() {
             >
 
                 <Tab.Screen name={ticketsName} component={MyTicketsScreen} />
-                <Tab.Screen name={homeName} component={HomeScreen} />
+                <Tab.Screen name={homeName} component={HomeStack} />
                 <Tab.Screen name={profileName} component={ProfileScreen} />
 
             </Tab.Navigator>
+
         </NavigationContainer>
     )
 }
