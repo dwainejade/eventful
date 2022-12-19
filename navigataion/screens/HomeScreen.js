@@ -1,11 +1,13 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import EventCard from '../../components/EventCard';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FeaturedEventCard from '../../components/FeaturedEventCard';
 
 const data = require('../../data/MOCK_DATA.json');
 
 const HomeScreen = () => {
+
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
@@ -24,6 +26,7 @@ const HomeScreen = () => {
                     <TouchableOpacity><Text>View all</Text></TouchableOpacity>
                 </View>
                 {/* featured cards are wide */}
+                <FeaturedEventCard data={data} />
 
                 <View style={styles.headingContainer}>
                     <Text style={styles.heading}>Trending</Text>
@@ -47,6 +50,19 @@ const HomeScreen = () => {
                     <Text style={styles.heading}>Nearby</Text>
                     <TouchableOpacity><Text>View all</Text></TouchableOpacity>
                 </View>
+                <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                >
+                    {
+                        data.map((item) => (
+                            <EventCard
+                                data={item}
+                                key={item.id}
+                            />
+                        )
+                        )}
+                </ScrollView>
 
             </ScrollView>
         </SafeAreaView>
