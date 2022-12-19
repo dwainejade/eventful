@@ -5,11 +5,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 
-export default function HomeStack({ navigation }) {
+export default function HomeStack() {
     return (
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="Home"
+            screenOptions={{
+                headerShown: false
+            }}
+        >
             <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="EventDetails" navigatoin={navigation} component={EventDetailsScreen} />
+            <Stack.Screen name="EventDetails" component={EventDetailsScreen} />
         </Stack.Navigator>
     );
 }
