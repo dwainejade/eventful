@@ -18,7 +18,7 @@ const EventCard = ({ data }) => {
     }
 
     return (
-        <TouchableOpacity style={styles.container}>
+        <View style={styles.container}>
             <View style={styles.cardTop}>
                 <Image
                     style={styles.image}
@@ -36,7 +36,7 @@ const EventCard = ({ data }) => {
                 </Pressable>
                 <Text style={styles.address}><Ionicons name='location' size={10} />{data.address}</Text>
             </View>
-        </TouchableOpacity>
+        </View>
     )
 }
 
