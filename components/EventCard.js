@@ -80,12 +80,12 @@ const styles = StyleSheet.create({
         height: 20,
         fontSize: 14,
         color: '#333',
-        borderWidth: 1,
-        borderColor: '#fff',
         borderRadius: 5,
         textAlign: 'center',
         justifyContent: 'center',
-        backgroundColor: '#f1f1f1'
+        backgroundColor: '#f1f1f1',
+        overflow: 'hidden',
+        padding: 1
     },
     cardBottom: {
         backgroundColor: '#fff',

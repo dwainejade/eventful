@@ -9,7 +9,8 @@ const HomeScreen = () => {
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <Text>Featured</Text>
-                <ScrollView horizontal={true}
+                <ScrollView
+                    horizontal={true}
                     showsHorizontalScrollIndicator={false}
                 >
                     {data.map((item) => (
