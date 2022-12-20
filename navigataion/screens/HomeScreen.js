@@ -12,10 +12,12 @@ const HomeScreen = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             <ScrollView>
 
-                <View style={styles.searchContainer} >
-                    <TextInput style={styles.searchBar} >
-                        <Ionicons name='search' size={15} />
-                    </TextInput>
+                <View style={styles.topContainer} >
+                    <View style={styles.searchContainer}>
+                        <TextInput style={styles.searchInput} />
+                        <Ionicons name='search' size={15} style={styles.searchIcon} />
+                    </View>
+
                     <TouchableOpacity style={styles.locationButton} >
                         <Ionicons style={styles.locationIcon} name='location' size={20} />
                     </TouchableOpacity>
@@ -38,12 +40,13 @@ const HomeScreen = ({ navigation }) => {
                     showsHorizontalScrollIndicator={false}
                 >
                     {data.map((item) => (
-                        <TouchableOpacity key={item.id} onPress={() => navigation.navigate('EventDetails')}>
+                        <TouchableOpacity
+                            key={item.id}
+                            onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
                             <EventCard
                                 data={item}
                             />
                         </TouchableOpacity>
-
                     )
                     )}
                 </ScrollView>
@@ -52,13 +55,16 @@ const HomeScreen = ({ navigation }) => {
                     <Text style={styles.heading}>Nearby</Text>
                     <TouchableOpacity><Text>View all</Text></TouchableOpacity>
                 </View>
+
                 <ScrollView
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                 >
                     {
                         data.map((item) => (
-                            <TouchableOpacity key={item.id} onPress={() => navigation.navigate('EventDetails')}>
+                            <TouchableOpacity
+                                key={item.id}
+                                onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
                                 <EventCard
                                     data={item}
                                 />
@@ -80,6 +86,42 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         flexDirection: 'row'
     },
+    topContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginHorizontal: 10,
+        marginVertical: 6
+    },
+    searchInput: {
+        flex: 1
+    },
+    searchIcon: {
+        position: 'absolute',
+        right: 12
+    },
+    searchContainer: {
+        backgroundColor: '#E9EBED',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        height: 35,
+        paddingVertical: 4,
+        paddingHorizontal: 14,
+        borderRadius: 20,
+        marginRight: 8
+    },
+    locationButton: {
+        height: 35,
+        width: 35,
+        backgroundColor: '#E9EBED',
+        borderRadius: 8,
+        padding: 7,
+    },
+    locationIcon: {
+        alignSelf: 'center'
+    },
     headingContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -94,30 +136,4 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: '500',
     },
-    searchContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        marginHorizontal: 10,
-        marginVertical: 6
-    },
-    searchBar: {
-        backgroundColor: '#E9EBED',
-        flex: 1,
-        height: 30,
-        padding: 8,
-        paddingHorizontal: 12,
-        borderRadius: 15,
-        marginRight: 8
-    },
-    locationButton: {
-        height: 30,
-        width: 30,
-        backgroundColor: '#E9EBED',
-        borderRadius: 8,
-        padding: 3,
-    },
-    locationIcon: {
-        alignSelf: 'center'
-    }
 });
