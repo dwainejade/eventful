@@ -38,12 +38,13 @@ const HomeScreen = ({ navigation }) => {
                     showsHorizontalScrollIndicator={false}
                 >
                     {data.map((item) => (
-                        <TouchableOpacity key={item.id} onPress={() => navigation.navigate('EventDetails')}>
+                        <TouchableOpacity
+                            key={item.id}
+                            onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
                             <EventCard
                                 data={item}
                             />
                         </TouchableOpacity>
-
                     )
                     )}
                 </ScrollView>
@@ -52,13 +53,16 @@ const HomeScreen = ({ navigation }) => {
                     <Text style={styles.heading}>Nearby</Text>
                     <TouchableOpacity><Text>View all</Text></TouchableOpacity>
                 </View>
+
                 <ScrollView
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                 >
                     {
                         data.map((item) => (
-                            <TouchableOpacity key={item.id} onPress={() => navigation.navigate('EventDetails')}>
+                            <TouchableOpacity
+                                key={item.id}
+                                onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
                                 <EventCard
                                     data={item}
                                 />
