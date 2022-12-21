@@ -9,7 +9,7 @@ import MyTicketsScreen from './screens/MyTicketsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 
 // screen names
-const homeName = 'HomeStack';
+const homeName = 'Home';
 const profileName = 'Profile';
 const ticketsName = 'Tickets';
 
