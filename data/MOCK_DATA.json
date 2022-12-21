@@ -10,7 +10,7 @@
     "isLiked": true,
     "eventDate": "05.06.2023",
     "description": "Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.\n\nPhasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.",
-    "price": "$31.12"
+    "price": "$31"
   },
   {
     "id": "49fbbd96-9335-4309-813d-84282b460012",
@@ -23,7 +23,7 @@
     "isLiked": false,
     "eventDate": "08.05.2023",
     "description": "Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.\n\nIn congue. Etiam justo. Etiam pretium iaculis justo.\n\nIn hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.",
-    "price": "$93.68"
+    "price": "$93"
   },
   {
     "id": "823b3d13-6f24-4172-a47b-c7b72ae6bb10",
@@ -36,7 +36,7 @@
     "isLiked": true,
     "eventDate": "26.06.2023",
     "description": "In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.\n\nNulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.\n\nCras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque.",
-    "price": "$123.67"
+    "price": "$123"
   },
   {
     "id": "1427b1d4-a2a2-4f6d-ae37-c805139bdbe8",
@@ -49,7 +49,7 @@
     "isLiked": false,
     "eventDate": "11.01.2023",
     "description": "Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.\n\nNam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.\n\nCurabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.",
-    "price": "$3.40"
+    "price": "$20"
   },
   {
     "id": "154db563-1f80-43d1-bfc4-8ab0d01813ef",
@@ -62,7 +62,7 @@
     "isLiked": true,
     "eventDate": "11.04.2023",
     "description": "Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.\n\nIn quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.",
-    "price": "$17.10"
+    "price": "$17"
   },
   {
     "id": "db7d4f44-b106-4fe6-9908-513de60374ce",
@@ -75,7 +75,7 @@
     "isLiked": false,
     "eventDate": "24.04.2023",
     "description": "Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.\n\nPellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.",
-    "price": "$47.90"
+    "price": "$47"
   },
   {
     "id": "5aec2347-4eeb-4571-a2b4-83c7ba8abf84",
@@ -88,7 +88,7 @@
     "isLiked": false,
     "eventDate": "13.08.2023",
     "description": "Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.\n\nCras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.\n\nProin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.",
-    "price": "$33.70"
+    "price": "$33"
   },
   {
     "id": "9fdbc078-6f5e-46dd-b1cd-4ee0c15c5051",
@@ -101,7 +101,7 @@
     "isLiked": false,
     "eventDate": "05.06.2023",
     "description": "Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.\n\nVestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.\n\nIn congue. Etiam justo. Etiam pretium iaculis justo.",
-    "price": "$3.20"
+    "price": "$33"
   },
   {
     "id": "a3201a7b-f74a-4253-8043-a0d7e13e08f9",
@@ -114,7 +114,7 @@
     "isLiked": false,
     "eventDate": "09.03.2023",
     "description": "Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.\n\nPraesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.\n\nCras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
-    "price": "$17.24"
+    "price": "$17"
   },
   {
     "id": "caad7c0f-99cd-41cc-bd60-052efaf55c7f",
@@ -127,7 +127,7 @@
     "isLiked": false,
     "eventDate": "18.08.2023",
     "description": "Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.\n\nQuisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.\n\nVestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.",
-    "price": "$137.60"
+    "price": "$137"
   },
   {
     "id": "b2d8e94e-d5d9-4679-a4fb-c3fbb044dc76",
@@ -140,7 +140,7 @@
     "isLiked": true,
     "eventDate": "10.07.2023",
     "description": "Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.\n\nAenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.\n\nCurabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.",
-    "price": "$75.24"
+    "price": "$75"
   },
   {
     "id": "16ab48e1-8b2a-4c26-b34e-dae65e019440",
@@ -153,7 +153,7 @@
     "isLiked": false,
     "eventDate": "11.04.2023",
     "description": "In congue. Etiam justo. Etiam pretium iaculis justo.\n\nIn hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.\n\nNulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.",
-    "price": "$110.35"
+    "price": "$110"
   },
   {
     "id": "def52b77-aed1-4a39-b04b-e06629c6a90c",
@@ -166,7 +166,7 @@
     "isLiked": false,
     "eventDate": "06.02.2023",
     "description": "Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.\n\nNam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.\n\nCurabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.",
-    "price": "$76.61"
+    "price": "$76"
   },
   {
     "id": "d924646b-d5fb-46db-bc5f-1fa53d3f3424",
@@ -179,7 +179,7 @@
     "isLiked": true,
     "eventDate": "20.08.2023",
     "description": "Phasellus in felis. Donec semper sapien a libero. Nam dui.\n\nProin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.\n\nInteger ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.",
-    "price": "$93.85"
+    "price": "$93"
   },
   {
     "id": "819d4626-1fc6-4930-8b95-604a9433291d",
@@ -192,6 +192,6 @@
     "isLiked": true,
     "eventDate": "27.01.2023",
     "description": "Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.\n\nProin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.\n\nDuis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.",
-    "price": "$18.64"
+    "price": "$18"
   }
 ]
