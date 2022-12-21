@@ -41,9 +41,20 @@ const EventDetailsScreen = ({ navigation, route }) => {
                         <View>
                             <Text style={styles.title}>{event.title}</Text>
                         </View>
-                        <View>
-                            <Text>{event.eventDate}</Text>
-                            <Text>Saturday, 4:00 PM - 10:00 PM</Text>
+                        <View style={styles.flexRow}>
+                            <Entypo name="calendar" size={24} color="black" />
+                            <View style={styles.textCon}>
+                                <Text style={{ fontWeight: 'bold' }}>{event.eventDate}</Text>
+                                <Text>Saturday, 4:00 PM - 10:00 PM</Text>
+                            </View>
+                        </View>
+
+                        <View style={styles.flexRow}>
+                            <Entypo name="location" size={24} color="black" />
+                            <View style={styles.textCon}>
+                                <Text style={{ fontWeight: 'bold' }}>Club Paradise</Text>
+                                <Text>{event.address}</Text>
+                            </View>
                         </View>
 
                         <Divider />
@@ -99,7 +110,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: '4%'
     },
     title: {
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 'bold'
     },
     eventTypeButton: {
@@ -112,8 +123,17 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     eventTypeText: {
-        fontSize: 11,
+        fontSize: 14,
     },
+    flexRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 10
+    },
+    textCon: {
+        marginLeft: 10
+    },
+    locationTextCon: { marginLeft: 10 },
     organizerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
