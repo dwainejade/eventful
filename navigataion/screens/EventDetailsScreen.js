@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native'
 import { useStoreState, useStoreActions } from 'easy-peasy'
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, Ionicons } from '@expo/vector-icons';
+import Divider from '../../components/Divider'
+import BackButton from '../../components/BackButton';
 
 
 const EventDetailsScreen = ({ navigation, route }) => {
@@ -18,6 +20,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
+            <BackButton />
             {!event ?
                 <Text>Loading...</Text>
                 :
@@ -43,16 +46,18 @@ const EventDetailsScreen = ({ navigation, route }) => {
                             <Text>Saturday, 4:00 PM - 10:00 PM</Text>
                         </View>
 
+                        <Divider />
+
                         <View style={styles.organizerContainer}>
                             <Image style={styles.organizerImage} source={{ uri: "https://randomuser.me/api/portraits/thumb/men/7.jpg" }} />
                             <View style={{ alignSelf: 'center' }}>
-                                <Text style={styles.header}>{event.organizer}</Text>
+                                <Text style={[styles.header, { marginBottom: 2 }]}>{event.organizer}</Text>
                                 <Text style={styles.subText}>Organizer</Text>
                             </View>
                         </View>
-                        <View>
-                            <Text style={{ fontWeight: 'bold' }}>About Event</Text>
-                            <Text>{event.description}</Text>
+                        <View style={{ paddingBottom: 140 }}>
+                            <Text style={[styles.header, { marginBottom: 6 }]}>About Event</Text>
+                            <Text style={{ fontSize: 16 }}>{event.description}</Text>
                         </View>
                     </View>
 
@@ -60,15 +65,18 @@ const EventDetailsScreen = ({ navigation, route }) => {
             }
 
             <View style={styles.bottomTab}>
-                <TouchableOpacity style={styles.shareBtn}>
-                    <Entypo name="share" size={24} color="black" />
-                </TouchableOpacity>
+                <View style={styles.shareBtnCon}>
+                    <TouchableOpacity style={styles.shareBtn}>
+                        <Entypo name="share" size={30} color="black" />
+                    </TouchableOpacity>
+                </View>
+
 
                 <TouchableOpacity style={styles.bookBtn} onPress={() => navigation.navigate('Booking')}>
-                    <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }} >Book Ticket</Text>
+                    <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18 }} >Book Ticket</Text>
                 </TouchableOpacity>
 
-                <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{event?.price}</Text>
+                <Text style={styles.price}>{event?.price} /<Ionicons name='person' size={18} /> </Text>
             </View>
         </View >
     )
@@ -108,6 +116,8 @@ const styles = StyleSheet.create({
     },
     organizerContainer: {
         flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 15,
     },
     organizerImage: {
         resizeMode: 'cover',
@@ -115,19 +125,19 @@ const styles = StyleSheet.create({
         height: 42,
         borderRadius: 25,
         marginRight: 8,
-        marginVertical: 10,
         alignItems: 'center',
     },
     header: {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontSize: 16,
     },
     subText: {
-        color: '#777'
+        color: '#777',
     },
     bottomTab: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
+        justifyContent: 'center',
         alignItems: 'center',
         left: '-2.5%',
         width: '105%',
@@ -140,22 +150,35 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         shadowRadius: 1,
         elevation: 5,
-        height: 60,
-        paddingTop: 15,
-        marginBottom: 30,
+        height: 95,
+        paddingTop: 12,
+        paddingBottom: 30
+    },
+    shareBtnCon: {
+        width: '25%'
     },
     shareBtn: {
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#E9EBED',
         padding: 4,
-        borderRadius: 15,
+        borderRadius: 20,
+        width: 40,
+        height: 40,
+        marginLeft: 20
     },
     bookBtn: {
-        width: 200,
-        borderWidth: 1,
-        height: 40,
+        width: '45%',
+        height: 45,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#000',
-        borderRadius: 20,
+        borderRadius: 25,
     },
+    price: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        width: '25%',
+        height: 40,
+        paddingVertical: 8,
+        textAlign: 'center',
+    }
 })
