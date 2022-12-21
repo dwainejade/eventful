@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native'
 import { useStoreState, useStoreActions } from 'easy-peasy'
+import { Entypo } from '@expo/vector-icons';
 
-const EventDetailsScreen = ({ route }) => {
+
+const EventDetailsScreen = ({ navigation, route }) => {
     const data = useStoreState((state) => state.events);
     const getEvent = useStoreActions(actions => actions.getEvent)
     const [event, setEvent] = useState()
@@ -11,9 +13,7 @@ const EventDetailsScreen = ({ route }) => {
     useEffect(() => {
         let event = data.filter((item) => item.id === itemId)
         setEvent(() => event[0])
-        console.log(event)
-
-        // console.log(eventDetails[0])
+        // console.log(event)
     }, [])
 
     return (
@@ -56,10 +56,21 @@ const EventDetailsScreen = ({ route }) => {
                         </View>
                     </View>
 
-
                 </ScrollView>
             }
-        </View>
+
+            <View style={styles.bottomTab}>
+                <TouchableOpacity style={styles.shareBtn}>
+                    <Entypo name="share" size={24} color="black" />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.bookBtn} onPress={() => navigation.navigate('Booking')}>
+                    <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }} >Book Ticket</Text>
+                </TouchableOpacity>
+
+                <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{event?.price}</Text>
+            </View>
+        </View >
     )
 }
 
@@ -69,7 +80,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     poster: {
         flex: 1,
@@ -112,5 +123,39 @@ const styles = StyleSheet.create({
     },
     subText: {
         color: '#777'
-    }
+    },
+    bottomTab: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        left: '-2.5%',
+        width: '105%',
+        position: 'absolute',
+        bottom: 0,
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#E9EBED',
+        borderBottomColor: 'transparent',
+        borderRadius: 30,
+        shadowRadius: 1,
+        elevation: 5,
+        height: 60,
+        paddingTop: 15,
+        marginBottom: 30,
+    },
+    shareBtn: {
+        backgroundColor: '#f5f5f5',
+        padding: 4,
+        borderRadius: 15,
+    },
+    bookBtn: {
+        width: 200,
+        borderWidth: 1,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#000',
+        borderRadius: 20,
+    },
 })
