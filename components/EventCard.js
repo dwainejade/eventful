@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#E9EBED',
         borderRadius: 12,
-        elevation: 2,
         shadowRadius: 1,
         elevation: 5,
         margin: 2,
