@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import { format } from "date-fns";
 
 const EventCard = ({ data }) => {
-
     const [buttonState, setButtonState] = useState(data.isLiked);
+    // TODO
+    // format date to 'd, MMM' (ex: '17 Aug')
 
     let buttonColor
     let buttonType
@@ -27,7 +28,7 @@ const EventCard = ({ data }) => {
                 <Pressable style={styles.likeButton} onPress={() => setButtonState(!buttonState)}>
                     <Ionicons name={buttonType} size={22} color={buttonColor} />
                 </Pressable>
-                <Text style={styles.date}>17 Aug</Text>
+                <Text style={styles.date}>{data.eventDate}</Text>
             </View>
             <View style={styles.cardBottom}>
                 <Text style={styles.title}>{data.title}</Text>
@@ -50,7 +51,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#E9EBED',
         borderRadius: 12,
-        elevation: 2,
         shadowRadius: 1,
         elevation: 5,
         margin: 2,

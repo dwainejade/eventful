@@ -3,10 +3,12 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity
 import EventCard from '../../components/EventCard';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeaturedEventCard from '../../components/FeaturedEventCard';
+import { useStoreState } from 'easy-peasy';
 
-const data = require('../../data/MOCK_DATA.json');
 
 const HomeScreen = ({ navigation }) => {
+    const data = useStoreState((state) => state.events);
+    //   const addTodo = useStoreActions((actions) => actions.addTodo);
 
     return (
         <SafeAreaView style={styles.container}>
