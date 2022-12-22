@@ -1,8 +1,9 @@
 # eventful (working title)
 
-### Event Booking App like Eventbrite
+Event Booking App like Eventbrite
 
 ## Planned Features
+
 - filter events by price, proximity, date, and type
 - see trending events based on ticket purchases
 - follow event organizers and venuew
