@@ -4,7 +4,8 @@ import EventCard from '../../components/EventCard';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeaturedEventCard from '../../components/FeaturedEventCard';
 import { useStoreState } from 'easy-peasy';
-
+import 'react-native-url-polyfill/auto'
+import { supabase } from '../../supabase/supabase';
 
 const HomeScreen = ({ navigation }) => {
     const data = useStoreState((state) => state.events);
