@@ -1,15 +1,27 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import EventCard from '../../components/EventCard';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeaturedEventCard from '../../components/FeaturedEventCard';
-import { useStoreState } from 'easy-peasy';
-import 'react-native-url-polyfill/auto'
+import { useStoreActions, useStoreState } from 'easy-peasy';
+import 'react-native-url-polyfill/auto' // need this for supabase to work 🤷🏽‍♂️
 import { supabase } from '../../supabase/supabase';
 
 const HomeScreen = ({ navigation }) => {
     const data = useStoreState((state) => state.events);
-    //   const addTodo = useStoreActions((actions) => actions.addTodo);
+    const setEvents = useStoreActions((actions) => actions.setEvents);
+
+    const getEvents = async () => {
+        let { data: Events, error } = await supabase
+            .from('Events')
+            .select('*')
+        setEvents(Events)
+        // console.log(Events)
+    }
+
+    useEffect(() => {
+        getEvents()
+    }, [])
 
     return (
         <SafeAreaView style={styles.container}>

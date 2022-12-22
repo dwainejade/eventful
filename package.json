@@ -15,6 +15,7 @@
     "@react-navigation/native-stack": "^6.9.7",
     "@react-navigation/stack": "^6.3.10",
     "@supabase/supabase-js": "^2.2.2",
+    "axios": "^1.2.1",
     "babel-plugin-inline-dotenv": "^1.7.0",
     "date-fns": "^2.29.3",
     "easy-peasy": "^5.2.0",

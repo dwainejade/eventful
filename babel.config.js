@@ -1,5 +1,5 @@
 require('dotenv').config({ path: './.env.development' })
-console.log('REACT_APP_BASE_URL: ' + process.env.REACT_APP_BASE_URL)
+// console.log('SUPABASE_KEY: ' + process.env.SUPABASE_KEY)
 
 module.exports = function (api) {
   api.cache(true);
