@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 
 const EventCard = ({ data }) => {
     const [buttonState, setButtonState] = useState(data.isLiked);
-    // TODO
-    // format date to 'd, MMM' (ex: '17 Aug')
 
     let buttonColor
     let buttonType
@@ -28,14 +26,14 @@ const EventCard = ({ data }) => {
                 <Pressable style={styles.likeButton} onPress={() => setButtonState(!buttonState)}>
                     <Ionicons name={buttonType} size={22} color={buttonColor} />
                 </Pressable>
-                <Text style={styles.date}>{data.eventDate}</Text>
+                <Text style={styles.date}>{format(parseISO(data.start_date), "dd MMM")}</Text>
             </View>
             <View style={styles.cardBottom}>
                 <Text style={styles.title}>{data.title}</Text>
                 <Pressable style={styles.eventTypeButton}>
-                    <Text style={styles.eventTypeText} >{data.eventType}</Text>
+                    <Text style={styles.eventTypeText} >{data.event_type}</Text>
                 </Pressable>
-                <Text style={styles.address}><Ionicons name='location' size={10} />{data.address}</Text>
+                <Text style={styles.address}><Ionicons name='location' size={10} />{data.venue}</Text>
             </View>
         </View>
     )
