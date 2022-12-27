@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Alert, StyleSheet, View, TouchableOpacity, Image, Text, TextInput, SafeAreaView } from 'react-native'
-import CustomInput from '../../components/CustomInput'
 import { supabase } from '../../supabase/supabase'
 import logo from '../../assets/splash.png'
 import { useNavigation } from '@react-navigation/native'
@@ -29,7 +28,7 @@ export default function Auth() {
             <Image source={logo} resizeMethod='contain' style={styles.logo} />
 
             <View style={[styles.verticallySpaced]}>
-                <TextInput
+                <TextInput style={styles.input}
                     label="Email"
                     // leftIcon={{ type: 'font-awesome', name: 'envelope' }}
                     onChangeText={(text) => setEmail(text)}
@@ -40,7 +39,7 @@ export default function Auth() {
             </View>
 
             <View style={styles.verticallySpaced}>
-                <TextInput
+                <TextInput style={styles.input}
                     label="Password"
                     // leftIcon={{ type: 'font-awesome', name: 'lock' }}
                     onChangeText={(text) => setPassword(text)}
@@ -57,9 +56,13 @@ export default function Auth() {
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={[styles.verticallySpaced, styles.mt20]} onPress={() => navigation.navigate('SignUp')}>
-                <Text>sign up</Text>
-            </TouchableOpacity>
+            <View style={[styles.footer, styles.verticallySpaced, styles.mt20]}>
+                <Text style={styles.question}>Don't already have an account?</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+                    <Text style={styles.link}> Sign Up</Text>
+                </TouchableOpacity>
+            </View>
+
 
         </SafeAreaView>
     )
@@ -85,6 +88,16 @@ const styles = StyleSheet.create({
     mt20: {
         marginTop: 20,
     },
+    input: {
+        fontSize: 16,
+        borderWidth: 1,
+        borderColor: '#9AA3AC',
+        width: '80%',
+        height: 40,
+        alignSelf: 'center',
+        borderRadius: 20,
+        paddingHorizontal: 18
+    },
     button: {
         backgroundColor: '#000',
         width: '80%',
@@ -97,5 +110,16 @@ const styles = StyleSheet.create({
         color: '#fff',
         alignSelf: 'center',
         fontSize: 16,
+    },
+    footer: {
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    question: {
+        color: '#4C5457'
+    },
+    link: {
+        color: 'dodgerblue',
+        fontWeight: 'bold'
     }
 })

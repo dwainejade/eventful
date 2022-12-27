@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { SafeAreaView, Alert, StyleSheet, View, Text } from 'react-native'
+import { SafeAreaView, Alert, StyleSheet, View, Text, TextInput } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { supabase } from '../../supabase/supabase'
 import CustomInput from '../../components/CustomInput'
@@ -26,7 +26,7 @@ export default function SignUpScreen() {
     return (
         <SafeAreaView>
             {/* <View style={[styles.verticallySpaced, styles.mt20]}>
-                <CustomInput
+                <TextInput style={styles.input}
                     label="Name"
                     leftIcon={{ type: 'font-awesome', name: 'envelope' }}
                     onChangeText={(text) => setName(text)}
@@ -36,7 +36,7 @@ export default function SignUpScreen() {
                 />
             </View> */}
             <View style={styles.verticallySpaced}>
-                <CustomInput
+                <TextInput style={styles.input}
                     label="Email"
                     // leftIcon={{ type: 'font-awesome', name: 'envelope' }}
                     onChangeText={(text) => setEmail(text)}
@@ -46,7 +46,7 @@ export default function SignUpScreen() {
                 />
             </View>
             <View style={styles.verticallySpaced}>
-                <CustomInput
+                <TextInput style={styles.input}
                     label="Password"
                     // leftIcon={{ type: 'font-awesome', name: 'lock' }}
                     onChangeText={(text) => setPassword(text)}
@@ -62,9 +62,13 @@ export default function SignUpScreen() {
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={[styles.verticallySpaced, styles.mt20]} onPress={() => navigation.navigate('Login')}>
-                <Text>log in</Text>
-            </TouchableOpacity>
+            <View style={[styles.footer, styles.verticallySpaced, styles.mt20]}>
+                <Text style={styles.question}>Already have an account?</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                    <Text style={styles.link}> Login</Text>
+                </TouchableOpacity>
+            </View>
+
         </SafeAreaView>
     )
 }
@@ -82,6 +86,16 @@ const styles = StyleSheet.create({
     mt20: {
         marginTop: 20,
     },
+    input: {
+        fontSize: 16,
+        borderWidth: 1,
+        borderColor: '#9AA3AC',
+        width: '80%',
+        height: 40,
+        alignSelf: 'center',
+        borderRadius: 20,
+        paddingHorizontal: 18
+    },
     button: {
         backgroundColor: '#000',
         width: '80%',
@@ -94,5 +108,16 @@ const styles = StyleSheet.create({
         color: '#fff',
         alignSelf: 'center',
         fontSize: 16,
+    },
+    footer: {
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    question: {
+        color: '#4C5457'
+    },
+    link: {
+        color: 'dodgerblue',
+        fontWeight: 'bold'
     }
 })
