@@ -2,6 +2,7 @@ import React from 'react'
 import HomeScreen from './screens/HomeScreen';
 import EventDetailsScreen from './screens/EventDetailsScreen';
 import BookingScreen from './screens/BookingScreen';
+import PosterScreen from './screens/PosterScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
@@ -28,6 +29,7 @@ export default function HomeStack({ navigation, route }) {
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="EventDetails" component={EventDetailsScreen} />
             <Stack.Screen name="Booking" component={BookingScreen} />
+            <Stack.Screen name="Poster" component={PosterScreen} />
         </Stack.Navigator>
     );
 }

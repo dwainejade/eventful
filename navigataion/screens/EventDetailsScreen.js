@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, TouchableHighlight } from 'react-native'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import Divider from '../../components/Divider'
 import BackButton from '../../components/BackButton';
+import { useNavigation } from '@react-navigation/native';
 
 
 const EventDetailsScreen = ({ navigation, route }) => {
@@ -11,6 +12,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
     const getEvent = useStoreActions(actions => actions.getEvent)
     const [event, setEvent] = useState()
     const { itemId } = route.params;
+    const { navigate } = useNavigation()
 
     useEffect(() => {
         let event = data.filter((item) => item.id === itemId)
@@ -28,15 +30,17 @@ const EventDetailsScreen = ({ navigation, route }) => {
                 <ScrollView>
 
                     <View>
-                        <Image
-                            style={styles.poster}
-                            source={{ uri: event.poster }}
-                        />
+                        <TouchableHighlight onPress={() => navigate('Poster', { imageData: event.poster })}>
+                            <Image
+                                style={styles.poster}
+                                source={{ uri: event.poster }}
+                            />
+                        </TouchableHighlight>
                     </View>
 
                     <View style={styles.detailsContainer}>
                         <View style={styles.eventTypeButton}>
-                            <Text style={styles.eventTypeText} >{event.eventType}</Text>
+                            <Text style={styles.eventTypeText} >{event.event_type}</Text>
                         </View>
                         <View>
                             <Text style={styles.title}>{event.title}</Text>
@@ -44,7 +48,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
                         <View style={styles.flexRow}>
                             <Entypo name="calendar" size={24} color="black" />
                             <View style={styles.textCon}>
-                                <Text style={{ fontWeight: 'bold' }}>{event.eventDate}</Text>
+                                <Text style={{ fontWeight: 'bold' }}>{event.start_date}</Text>
                                 <Text>Saturday, 4:00 PM - 10:00 PM</Text>
                             </View>
                         </View>
@@ -53,7 +57,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
                             <Entypo name="location" size={24} color="black" />
                             <View style={styles.textCon}>
                                 <Text style={{ fontWeight: 'bold' }}>Club Paradise</Text>
-                                <Text>{event.address}</Text>
+                                <Text>{event.venue}</Text>
                             </View>
                         </View>
 
@@ -87,7 +91,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
                     <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18 }} >Book Ticket</Text>
                 </TouchableOpacity>
 
-                <Text style={styles.price}>{event?.price} /<Ionicons name='person' size={18} /> </Text>
+                <Text style={styles.price}>${event?.price} /<Ionicons name='person' size={18} /> </Text>
             </View>
         </View >
     )
