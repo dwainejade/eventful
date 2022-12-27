@@ -6,7 +6,7 @@ import Divider from '../../components/Divider'
 import BackButton from '../../components/BackButton';
 import { useNavigation } from '@react-navigation/native';
 import { supabase } from '../../supabase/supabase';
-import axios from 'axios';
+import Map from '../../components/Map';
 
 const EventDetailsScreen = ({ navigation, route }) => {
     const data = useStoreState((state) => state.events);
@@ -100,11 +100,13 @@ const EventDetailsScreen = ({ navigation, route }) => {
                                 <Text style={styles.subText}>Organizer</Text>
                             </View>
                         </View>
-                        <View style={{ paddingBottom: 140 }}>
+                        <View style={{ paddingBottom: 40 }}>
                             <Text style={[styles.header, { marginBottom: 6 }]}>About Event</Text>
                             <Text style={{ fontSize: 16 }}>{event.description}</Text>
                         </View>
+                        <Map latitude={venue?.latitude} longitude={venue?.longitude} />
                     </View>
+
 
                 </ScrollView>
             }
@@ -136,12 +138,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     poster: {
-        flex: 1,
-        height: 300,
+        height: 350,
         resizeMode: 'cover'
     },
     detailsContainer: {
-        paddingHorizontal: '4%'
+        paddingHorizontal: '4%',
+        marginBottom: 140
     },
     title: {
         fontSize: 24,
@@ -167,7 +169,9 @@ const styles = StyleSheet.create({
     textCon: {
         marginLeft: 10
     },
-    locationTextCon: { marginLeft: 10 },
+    locationTextCon: {
+        marginLeft: 10
+    },
     organizerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -188,6 +192,9 @@ const styles = StyleSheet.create({
     subText: {
         color: '#777',
     },
+    description: {
+        borderWidth: 1
+    },
     bottomTab: {
         flex: 1,
         flexDirection: 'row',
@@ -205,7 +212,7 @@ const styles = StyleSheet.create({
         shadowRadius: 1,
         elevation: 5,
         height: 95,
-        paddingTop: 12,
+        paddingTop: 8,
         paddingBottom: 30
     },
     shareBtnCon: {
