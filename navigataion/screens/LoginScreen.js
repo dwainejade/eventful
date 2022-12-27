@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
-import { Alert, StyleSheet, View, TouchableOpacity, Image, Text, SafeAreaView } from 'react-native'
+import { Alert, StyleSheet, View, TouchableOpacity, Image, Text, TextInput, SafeAreaView } from 'react-native'
 import CustomInput from '../../components/CustomInput'
 import { supabase } from '../../supabase/supabase'
 import logo from '../../assets/splash.png'
+import { useNavigation } from '@react-navigation/native'
 
 export default function Auth() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
+    const navigation = useNavigation()
 
     async function signInWithEmail() {
         setLoading(true)
@@ -27,7 +29,7 @@ export default function Auth() {
             <Image source={logo} resizeMethod='contain' style={styles.logo} />
 
             <View style={[styles.verticallySpaced]}>
-                <CustomInput
+                <TextInput
                     label="Email"
                     // leftIcon={{ type: 'font-awesome', name: 'envelope' }}
                     onChangeText={(text) => setEmail(text)}
@@ -38,7 +40,7 @@ export default function Auth() {
             </View>
 
             <View style={styles.verticallySpaced}>
-                <CustomInput
+                <TextInput
                     label="Password"
                     // leftIcon={{ type: 'font-awesome', name: 'lock' }}
                     onChangeText={(text) => setPassword(text)}
@@ -54,6 +56,10 @@ export default function Auth() {
                     <Text style={styles.buttonText}>Sign in</Text>
                 </TouchableOpacity>
             </View>
+
+            <TouchableOpacity style={[styles.verticallySpaced, styles.mt20]} onPress={() => navigation.navigate('SignUp')}>
+                <Text>sign up</Text>
+            </TouchableOpacity>
 
         </SafeAreaView>
     )
