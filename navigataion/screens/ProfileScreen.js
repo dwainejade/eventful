@@ -12,7 +12,6 @@ export default function Profile() {
 
     useEffect(() => {
         if (session) getProfile()
-        console.log(session?.user)
     }, [session])
 
     async function getProfile() {
