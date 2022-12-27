@@ -1,17 +1,24 @@
 import React, { useEffect } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions, FlatList } from 'react-native'
+// import { FlashList } from "@shopify/flash-list";
 import EventCard from '../../components/EventCard';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeaturedEventCard from '../../components/FeaturedEventCard';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import 'react-native-url-polyfill/auto' // need this for supabase to work 🤷🏽‍♂️
 import { supabase } from '../../supabase/supabase';
 
 const HomeScreen = ({ navigation }) => {
+    // const windowWidth = Dimensions.get('window').width;
+    // const windowHeight = Dimensions.get('window').height;
     const data = useStoreState((state) => state.events);
     const setEvents = useStoreActions((actions) => actions.setEvents);
 
-    const getEvents = async () => {
+    useEffect(() => {
+        getEvents()
+    }, [])
+
+    async function getEvents() {
         let { data: Events, error } = await supabase
             .from('Events')
             .select('*')
@@ -19,9 +26,12 @@ const HomeScreen = ({ navigation }) => {
         // console.log(Events)
     }
 
-    useEffect(() => {
-        getEvents()
-    }, [])
+    const eventCard = ({ item }) => (
+        <TouchableOpacity
+            onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
+            <EventCard data={item} />
+        </TouchableOpacity>
+    );
 
     return (
         <SafeAreaView style={styles.container}>
@@ -50,29 +60,48 @@ const HomeScreen = ({ navigation }) => {
                     <TouchableOpacity><Text>View all</Text></TouchableOpacity>
                 </View>
 
-                <ScrollView
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                >
-                    {data.map((item) => (
-                        <TouchableOpacity
-                            key={item.id}
-                            onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
-                            <EventCard
-                                data={item}
-                            />
-                        </TouchableOpacity>
-                    )
-                    )}
-                </ScrollView>
+                <View>
+                    {/* <FlashList
+                        data={data}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
+                                <EventCard
+                                    data={item}
+                                />
+                            </TouchableOpacity>
+                        )}
+                        keyExtractor={(item, index) => index}
+                        estimatedItemSize={50}
+                        horizontal
+                    /> */}
+
+                    <FlatList
+                        data={data}
+                        renderItem={eventCard}
+                        keyExtractor={item => item.id}
+                        horizontal
+                        initialNumToRender={5}
+                        removeClippedSubviews
+                    />
+                </View>
 
                 <View style={styles.headingContainer}>
                     <Text style={styles.heading}>Nearby</Text>
                     <TouchableOpacity><Text>View all</Text></TouchableOpacity>
                 </View>
-
-                <ScrollView
-                    horizontal={true}
+                <View>
+                    <FlatList
+                        data={data}
+                        renderItem={eventCard}
+                        keyExtractor={item => item.id}
+                        horizontal
+                        initialNumToRender={5}
+                        removeClippedSubviews
+                    />
+                </View>
+                {/* <ScrollView
+                    horizontal
                     showsHorizontalScrollIndicator={false}
                 >
                     {
@@ -86,7 +115,8 @@ const HomeScreen = ({ navigation }) => {
                             </TouchableOpacity>
                         )
                         )}
-                </ScrollView>
+                </ScrollView> */}
+
 
             </ScrollView>
         </SafeAreaView>
