@@ -10,7 +10,7 @@ const Stack = createStackNavigator();
 
 export default function HomeStack({ navigation, route }) {
     React.useLayoutEffect(() => {
-        const tabHiddenRoutes = ["EventDetails", "Booking"];
+        const tabHiddenRoutes = ["EventDetails", "Booking", "Poster"];
         const routeName = getFocusedRouteNameFromRoute(route);
 
         if (tabHiddenRoutes.includes(getFocusedRouteNameFromRoute(route))) {

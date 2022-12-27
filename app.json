@@ -2,7 +2,7 @@
   "expo": {
     "name": "eventful",
     "slug": "eventful",
-    "owner": "dwainesteam",
+    "owner": "dwainegnd",
     "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,9 +15,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.dwainegnd.eventbookingapp"
