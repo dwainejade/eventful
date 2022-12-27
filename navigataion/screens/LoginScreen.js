@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Alert, StyleSheet, View, TouchableOpacity, Image, Text, TextInput, SafeAreaView } from 'react-native'
+import Checkbox from 'expo-checkbox';
 import { supabase } from '../../supabase/supabase'
 import logo from '../../assets/splash.png'
 import { useNavigation } from '@react-navigation/native'
@@ -8,6 +9,7 @@ export default function Auth() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
+    const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const navigation = useNavigation()
 
     async function signInWithEmail() {
@@ -44,10 +46,19 @@ export default function Auth() {
                     // leftIcon={{ type: 'font-awesome', name: 'lock' }}
                     onChangeText={(text) => setPassword(text)}
                     value={password}
-                    secureTextEntry={true}
+                    secureTextEntry={!toggleCheckBox}
                     placeholder="Password"
                     autoCapitalize={'none'}
                 />
+            </View>
+
+            <View style={styles.flexRow}>
+                <Checkbox style={styles.checkbox}
+                    disabled={false}
+                    value={toggleCheckBox}
+                    onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                />
+                <Text style={styles.label}>Show password</Text>
             </View>
 
             <View style={[styles.verticallySpaced, styles.mt20]}>
@@ -71,8 +82,8 @@ export default function Auth() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 10,
-        paddingHorizontal: 40,
+        maxWidth: 250,
+        alignSelf: 'center'
     },
     logo: {
         width: 250,
@@ -85,6 +96,11 @@ const styles = StyleSheet.create({
         paddingBottom: 4,
         alignSelf: 'stretch',
     },
+    flexRow: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
     mt20: {
         marginTop: 20,
     },
@@ -92,15 +108,23 @@ const styles = StyleSheet.create({
         fontSize: 16,
         borderWidth: 1,
         borderColor: '#9AA3AC',
-        width: '80%',
+        width: '100%',
         height: 40,
         alignSelf: 'center',
         borderRadius: 20,
         paddingHorizontal: 18
     },
+    checkbox: {
+        height: 16,
+        width: 16,
+        margin: 5,
+    },
+    label: {
+        color: '#444'
+    },
     button: {
         backgroundColor: '#000',
-        width: '80%',
+        width: '100%',
         height: 40,
         alignSelf: 'center',
         justifyContent: 'center',

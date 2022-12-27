@@ -1,30 +1,38 @@
 import React, { useState } from 'react'
 import { SafeAreaView, Alert, StyleSheet, View, Text, TextInput } from 'react-native'
+import Checkbox from 'expo-checkbox';
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { supabase } from '../../supabase/supabase'
-import CustomInput from '../../components/CustomInput'
 import { useNavigation } from '@react-navigation/native'
 
 export default function SignUpScreen() {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [password2, setPassword2] = useState('')
     const [loading, setLoading] = useState(false)
-    const navigation = useNavigation()
+    const [toggleCheckBox, setToggleCheckBox] = useState(false)
+    const { navigate } = useNavigation()
 
     async function signUpWithEmail() {
+        if (password !== password2) {
+            Alert.alert('Passwords do not match')
+            return
+        }
         setLoading(true)
         const { error } = await supabase.auth.signUp({
-            email: 'dwainegnd@gmail.com',
-            password: 'testuser22',
+            email: email,
+            password: password,
         })
 
         if (error) Alert.alert(error.message)
+        else navigate('Login')
+
         setLoading(false)
     }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             {/* <View style={[styles.verticallySpaced, styles.mt20]}>
                 <TextInput style={styles.input}
                     label="Name"
@@ -35,6 +43,7 @@ export default function SignUpScreen() {
                     autoCapitalize={'none'}
                 />
             </View> */}
+            <Text style={styles.header}>SignUp</Text>
             <View style={styles.verticallySpaced}>
                 <TextInput style={styles.input}
                     label="Email"
@@ -51,11 +60,32 @@ export default function SignUpScreen() {
                     // leftIcon={{ type: 'font-awesome', name: 'lock' }}
                     onChangeText={(text) => setPassword(text)}
                     value={password}
-                    secureTextEntry={true}
+                    secureTextEntry={!toggleCheckBox}
                     placeholder="Password"
                     autoCapitalize={'none'}
                 />
             </View>
+            <View style={styles.verticallySpaced}>
+                <TextInput style={styles.input}
+                    label="Password2"
+                    // leftIcon={{ type: 'font-awesome', name: 'lock' }}
+                    onChangeText={(text) => setPassword2(text)}
+                    value={password2}
+                    secureTextEntry={!toggleCheckBox}
+                    placeholder="Confirm Password"
+                    autoCapitalize={'none'}
+                />
+            </View>
+
+            <View style={styles.flexRow}>
+                <Checkbox style={styles.checkbox}
+                    disabled={false}
+                    value={toggleCheckBox}
+                    onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                />
+                <Text style={styles.label}>Show password</Text>
+            </View>
+
             <View style={styles.verticallySpaced}>
                 <TouchableOpacity style={styles.button} disabled={loading} onPress={() => signUpWithEmail()} >
                     <Text style={styles.buttonText}>Register</Text>
@@ -64,7 +94,7 @@ export default function SignUpScreen() {
 
             <View style={[styles.footer, styles.verticallySpaced, styles.mt20]}>
                 <Text style={styles.question}>Already have an account?</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <TouchableOpacity onPress={() => navigate('Login')}>
                     <Text style={styles.link}> Login</Text>
                 </TouchableOpacity>
             </View>
@@ -75,8 +105,9 @@ export default function SignUpScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 40,
-        padding: 12,
+        flex: 1,
+        width: 250,
+        alignSelf: 'center'
     },
     verticallySpaced: {
         paddingTop: 4,
@@ -86,19 +117,32 @@ const styles = StyleSheet.create({
     mt20: {
         marginTop: 20,
     },
+    flexRow: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    },
     input: {
         fontSize: 16,
         borderWidth: 1,
         borderColor: '#9AA3AC',
-        width: '80%',
+        width: '100%',
         height: 40,
         alignSelf: 'center',
         borderRadius: 20,
         paddingHorizontal: 18
     },
+    checkbox: {
+        height: 16,
+        width: 16,
+        margin: 5,
+    },
+    label: {
+        color: '#444'
+    },
     button: {
         backgroundColor: '#000',
-        width: '80%',
+        width: '100%',
         height: 40,
         alignSelf: 'center',
         justifyContent: 'center',
