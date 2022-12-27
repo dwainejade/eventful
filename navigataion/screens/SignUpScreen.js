@@ -1,43 +1,50 @@
 import React, { useState } from 'react'
-import { Alert, StyleSheet, View, TouchableOpacity, Image, Text, TextInput, SafeAreaView } from 'react-native'
+import { SafeAreaView, Alert, StyleSheet, View, Text, TextInput } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import { supabase } from '../../supabase/supabase'
-import logo from '../../assets/splash.png'
+import CustomInput from '../../components/CustomInput'
 import { useNavigation } from '@react-navigation/native'
 
-export default function Auth() {
+export default function SignUpScreen() {
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const navigation = useNavigation()
 
-    async function signInWithEmail() {
+    async function signUpWithEmail() {
         setLoading(true)
-        const { error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password,
+        const { error } = await supabase.auth.signUp({
+            email: 'dwainegnd@gmail.com',
+            password: 'testuser22',
         })
 
         if (error) Alert.alert(error.message)
         setLoading(false)
     }
 
-
     return (
-        <SafeAreaView style={styles.container}>
-
-            <Image source={logo} resizeMethod='contain' style={styles.logo} />
-
-            <View style={[styles.verticallySpaced]}>
+        <SafeAreaView>
+            {/* <View style={[styles.verticallySpaced, styles.mt20]}>
+                <TextInput style={styles.input}
+                    label="Name"
+                    leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+                    onChangeText={(text) => setName(text)}
+                    value={name}
+                    placeholder="Full name"
+                    autoCapitalize={'none'}
+                />
+            </View> */}
+            <View style={styles.verticallySpaced}>
                 <TextInput style={styles.input}
                     label="Email"
                     // leftIcon={{ type: 'font-awesome', name: 'envelope' }}
                     onChangeText={(text) => setEmail(text)}
                     value={email}
-                    placeholder="Email"
+                    placeholder="email@address.com"
                     autoCapitalize={'none'}
                 />
             </View>
-
             <View style={styles.verticallySpaced}>
                 <TextInput style={styles.input}
                     label="Password"
@@ -49,20 +56,18 @@ export default function Auth() {
                     autoCapitalize={'none'}
                 />
             </View>
-
-            <View style={[styles.verticallySpaced, styles.mt20]}>
-                <TouchableOpacity style={styles.button} disabled={loading} onPress={() => signInWithEmail()} >
-                    <Text style={styles.buttonText}>Sign in</Text>
+            <View style={styles.verticallySpaced}>
+                <TouchableOpacity style={styles.button} disabled={loading} onPress={() => signUpWithEmail()} >
+                    <Text style={styles.buttonText}>Register</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={[styles.footer, styles.verticallySpaced, styles.mt20]}>
-                <Text style={styles.question}>Don't already have an account?</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-                    <Text style={styles.link}> Sign Up</Text>
+                <Text style={styles.question}>Already have an account?</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                    <Text style={styles.link}> Login</Text>
                 </TouchableOpacity>
             </View>
-
 
         </SafeAreaView>
     )
@@ -70,15 +75,8 @@ export default function Auth() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        marginTop: 10,
-        paddingHorizontal: 40,
-    },
-    logo: {
-        width: 250,
-        height: 150,
-        marginTop: 20,
-        alignSelf: 'center'
+        marginTop: 40,
+        padding: 12,
     },
     verticallySpaced: {
         paddingTop: 4,
