@@ -9,6 +9,10 @@ const store = createStore(
         }),
         deleteEvent: action((state, id) => {
             state.events.filter((item) => item !== id)
+        }),
+        session: null,
+        setSession: action((state, payload) => {
+            state.session = payload
         })
     })
 )
