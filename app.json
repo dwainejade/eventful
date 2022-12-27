@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "event-booking-app",
-    "slug": "event-booking-app",
+    "name": "eventful",
+    "slug": "eventful",
     "owner": "dwainesteam",
     "version": "0.1.0",
     "orientation": "portrait",
@@ -36,6 +36,7 @@
       "eas": {
         "projectId": "57b94105-b835-4c4e-813b-c560a39b97c8"
       }
-    }
+    },
+    "githubUrl": "https://github.com/dwainejade/eventful"
   }
 }
