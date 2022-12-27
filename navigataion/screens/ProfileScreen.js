@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../supabase/supabase'
-import { StyleSheet, View, Alert, Button, TextInput } from 'react-native'
+import { StyleSheet, View, Alert, Button, TextInput, SafeAreaView } from 'react-native'
 import { useStoreState } from 'easy-peasy';
 
-export default function Account() {
+export default function Profile() {
     const [loading, setLoading] = useState(true)
     const [username, setUsername] = useState('')
     const [website, setWebsite] = useState('')
@@ -12,6 +12,7 @@ export default function Account() {
 
     useEffect(() => {
         if (session) getProfile()
+        console.log(session?.user)
     }, [session])
 
     async function getProfile() {
@@ -74,15 +75,15 @@ export default function Account() {
     }
 
     return (
-        <View>
+        <SafeAreaView>
             <View style={[styles.verticallySpaced, styles.mt20]}>
-                <TextInput label="Email" value={session?.user?.email} disabled />
+                <TextInput style={styles.input} label="Email" value={session?.user?.email} disabled />
             </View>
             <View style={styles.verticallySpaced}>
-                <TextInput label="Username" value={username || ''} onChangeText={(text) => setUsername(text)} />
+                <TextInput style={styles.input} label="Username" value={username || ''} onChangeText={(text) => setUsername(text)} />
             </View>
             <View style={styles.verticallySpaced}>
-                <TextInput label="Website" value={website || ''} onChangeText={(text) => setWebsite(text)} />
+                <TextInput style={styles.input} label="Website" value={website || ''} onChangeText={(text) => setWebsite(text)} />
             </View>
 
             <View style={[styles.verticallySpaced, styles.mt20]}>
@@ -96,7 +97,7 @@ export default function Account() {
             <View style={styles.verticallySpaced}>
                 <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -112,5 +113,15 @@ const styles = StyleSheet.create({
     },
     mt20: {
         marginTop: 20,
+    },
+    input: {
+        fontSize: 16,
+        borderWidth: 1,
+        borderColor: '#9AA3AC',
+        width: '80%',
+        height: 40,
+        alignSelf: 'center',
+        borderRadius: 20,
+        paddingHorizontal: 18
     },
 })
