@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions, FlatList } from 'react-native'
+import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, FlatList } from 'react-native'
 // import { FlashList } from "@shopify/flash-list";
 import EventCard from '../../components/EventCard';
 import FeaturedEventCard from '../../components/FeaturedEventCard';
@@ -9,8 +9,6 @@ import 'react-native-url-polyfill/auto' // need this for supabase to work ðŸ¤·ðŸ
 import { supabase } from '../../supabase/supabase';
 
 const HomeScreen = ({ navigation }) => {
-    // const windowWidth = Dimensions.get('window').width;
-    // const windowHeight = Dimensions.get('window').height;
     const data = useStoreState((state) => state.events);
     const setEvents = useStoreActions((actions) => actions.setEvents);
 
@@ -23,6 +21,7 @@ const HomeScreen = ({ navigation }) => {
             .from('Events')
             .select('*')
         setEvents(Events)
+        if (error) console.log(error)
         // console.log(Events)
     }
 
