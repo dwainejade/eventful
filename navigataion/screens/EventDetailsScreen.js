@@ -5,12 +5,14 @@ import { Entypo, Ionicons } from '@expo/vector-icons';
 import Divider from '../../components/Divider'
 import BackButton from '../../components/BackButton';
 import { useNavigation } from '@react-navigation/native';
-
+import { supabase } from '../../supabase/supabase';
+import axios from 'axios';
 
 const EventDetailsScreen = ({ navigation, route }) => {
     const data = useStoreState((state) => state.events);
     const getEvent = useStoreActions(actions => actions.getEvent)
-    const [event, setEvent] = useState()
+    const [event, setEvent] = useState(null)
+    const [venue, setVenue] = useState(null)
     const { itemId } = route.params;
     const { navigate } = useNavigation()
     const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -20,13 +22,30 @@ const EventDetailsScreen = ({ navigation, route }) => {
         setEvent(() => event[0])
         // console.log(event)
         fadeIn()
-    }, [])
+        if (event) {
+            getVenue(event.venue)
+        }
+    }, [event])
+
+    async function getVenue(id) {
+        let { data: Venue, error } = await supabase
+            .from('Venue')
+            .select(id)
+            .then(setVenue(Venue))
+
+        if (error) {
+            console.log('error getting venue', error)
+        }
+        setVenue(Venue[0])
+        console.log(Venue)
+        return Venue
+    }
 
     const fadeIn = () => {
         // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 1200,
+            toValue: -100,
+            duration: 500,
             useNativeDriver: true
         }).start();
     };
@@ -68,7 +87,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
                             <Entypo name="location" size={24} color="black" />
                             <View style={styles.textCon}>
                                 <Text style={{ fontWeight: 'bold' }}>Club Paradise</Text>
-                                <Text>{event.venue}</Text>
+                                <Text>{venue?.address}</Text>
                             </View>
                         </View>
 
@@ -90,7 +109,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
                 </ScrollView>
             }
 
-            <Animated.View style={[styles.bottomTab, { opacity: fadeAnim }]} >
+            <Animated.View style={[styles.bottomTab, { transform: [{ translateY: fadeAnim }] }]} >
                 <View style={styles.shareBtnCon}>
                     <TouchableOpacity style={styles.shareBtn}>
                         <Entypo name="share" size={30} color="black" />
@@ -177,7 +196,7 @@ const styles = StyleSheet.create({
         left: '-2.5%',
         width: '105%',
         position: 'absolute',
-        bottom: 0,
+        bottom: -100,
         backgroundColor: '#fff',
         borderWidth: 1,
         borderColor: '#E9EBED',
