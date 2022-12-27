@@ -37,7 +37,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
             console.log('error getting venue', error)
         }
         setVenue(Venue[0])
-        console.log(Venue)
+        // console.log(Venue)
         return Venue
     }
 
