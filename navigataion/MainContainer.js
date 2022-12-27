@@ -23,7 +23,6 @@ export default function MainContainer() {
     const session = useStoreState((state) => state.session)
     const setSession = useStoreActions((actions) => actions.setSession);
 
-    console.log({ session })
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session)
