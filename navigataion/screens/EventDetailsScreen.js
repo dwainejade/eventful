@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, TouchableHighlight } from 'react-native'
+import React, { useEffect, useState, useRef } from 'react'
+import { Animated, StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, TouchableHighlight } from 'react-native'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import Divider from '../../components/Divider'
@@ -13,12 +13,23 @@ const EventDetailsScreen = ({ navigation, route }) => {
     const [event, setEvent] = useState()
     const { itemId } = route.params;
     const { navigate } = useNavigation()
+    const fadeAnim = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
         let event = data.filter((item) => item.id === itemId)
         setEvent(() => event[0])
         // console.log(event)
+        fadeIn()
     }, [])
+
+    const fadeIn = () => {
+        // Will change fadeAnim value to 1 in 5 seconds
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 1200,
+            useNativeDriver: true
+        }).start();
+    };
 
     return (
         <View style={styles.container}>
@@ -79,7 +90,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
                 </ScrollView>
             }
 
-            <View style={styles.bottomTab}>
+            <Animated.View style={[styles.bottomTab, { opacity: fadeAnim }]} >
                 <View style={styles.shareBtnCon}>
                     <TouchableOpacity style={styles.shareBtn}>
                         <Entypo name="share" size={30} color="black" />
@@ -92,7 +103,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
                 </TouchableOpacity>
 
                 <Text style={styles.price}>${event?.price} /<Ionicons name='person' size={18} /> </Text>
-            </View>
+            </Animated.View>
         </View >
     )
 }
