@@ -17,12 +17,12 @@ const HomeScreen = ({ navigation }) => {
     }, [])
 
     async function getEvents() {
-        let { data: Events, error } = await supabase
-            .from('Events')
-            .select('*')
-        setEvents(Events)
-        if (error) console.log(error)
-        // console.log(Events)
+        try {
+            const { data: Events } = await supabase.from('Events').select('*');
+            setEvents(Events);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     const eventCard = ({ item }) => (
@@ -34,7 +34,7 @@ const HomeScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView>
+            <View>
 
                 <View style={styles.topContainer} >
                     <View style={styles.searchContainer}>
@@ -60,21 +60,6 @@ const HomeScreen = ({ navigation }) => {
                 </View>
 
                 <View>
-                    {/* <FlashList
-                        data={data}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
-                                <EventCard
-                                    data={item}
-                                />
-                            </TouchableOpacity>
-                        )}
-                        keyExtractor={(item, index) => index}
-                        estimatedItemSize={50}
-                        horizontal
-                    /> */}
-
                     <FlatList
                         data={data}
                         renderItem={eventCard}
@@ -89,7 +74,7 @@ const HomeScreen = ({ navigation }) => {
                     <Text style={styles.heading}>Nearby</Text>
                     <TouchableOpacity><Text>View all</Text></TouchableOpacity>
                 </View>
-                <View>
+                <View >
                     <FlatList
                         data={data}
                         renderItem={eventCard}
@@ -99,25 +84,8 @@ const HomeScreen = ({ navigation }) => {
                         removeClippedSubviews
                     />
                 </View>
-                {/* <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                >
-                    {
-                        data.map((item) => (
-                            <TouchableOpacity
-                                key={item.id}
-                                onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
-                                <EventCard
-                                    data={item}
-                                />
-                            </TouchableOpacity>
-                        )
-                        )}
-                </ScrollView> */}
 
-
-            </ScrollView>
+            </View>
         </SafeAreaView>
     )
 }
