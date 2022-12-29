@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { format, parseISO } from "date-fns";
+import * as Animatable from 'react-native-animatable';
 
-const EventCard = ({ data }) => {
+const EventCard = ({ data, index }) => {
     const [buttonState, setButtonState] = useState(data.isLiked);
+    const [isLoading, setIsLoading] = useState(true)
 
     let buttonColor
     let buttonType
@@ -17,25 +19,32 @@ const EventCard = ({ data }) => {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.cardTop}>
-                <Image
-                    style={styles.image}
-                    source={{ uri: data.poster }}
-                />
-                <Pressable style={styles.likeButton} onPress={() => setButtonState(!buttonState)}>
-                    <Ionicons name={buttonType} size={22} color={buttonColor} />
-                </Pressable>
-                <Text style={styles.date}>{format(parseISO(data.start_date), "dd MMM")}</Text>
-            </View>
-            <View style={styles.cardBottom}>
-                <Text style={styles.title}>{data.title}</Text>
-                <Pressable style={styles.eventTypeButton}>
-                    <Text style={styles.eventTypeText} >{data.event_type}</Text>
-                </Pressable>
-                <Text style={styles.address}><Ionicons name='location' size={10} />{data.venue}</Text>
-            </View>
-        </View>
+        <>
+            {isLoading &&
+                <View style={styles.spinnerContainer}>
+                    <ActivityIndicator size='small' color="#333" />
+                </View>
+            }
+            <Animatable.View style={styles.container} animation='zoomIn' duration={800} easing="ease-out-circ" delay={index * 20} onAnimationBegin={() => setIsLoading(false)}>
+                <View style={styles.cardTop}>
+                    <Image
+                        style={styles.image}
+                        source={{ uri: data.poster }}
+                    />
+                    <Pressable style={styles.likeButton} onPress={() => setButtonState(!buttonState)}>
+                        <Ionicons name={buttonType} size={22} color={buttonColor} />
+                    </Pressable>
+                    <Text style={styles.date}>{format(parseISO(data.start_date), "dd MMM")}</Text>
+                </View>
+                <View style={styles.cardBottom}>
+                    <Text style={styles.title}>{data.title}</Text>
+                    <Pressable style={styles.eventTypeButton}>
+                        <Text style={styles.eventTypeText} >{data.event_type}</Text>
+                    </Pressable>
+                    <Text style={styles.address}><Ionicons name='location' size={10} />{data.venue}</Text>
+                </View>
+            </Animatable.View>
+        </>
     )
 }
 
@@ -53,6 +62,12 @@ const styles = StyleSheet.create({
         elevation: 5,
         margin: 2,
         marginHorizontal: 8
+    },
+    spinnerContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        position: 'absolute',
+        top: 100
     },
     cardTop: {
         height: '65%'
