@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
-import { Animated, StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, TouchableHighlight, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, TouchableHighlight, ActivityIndicator } from 'react-native'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 import { supabase } from '../../supabase/supabase';
 import { Entypo, Ionicons } from '@expo/vector-icons';
@@ -17,43 +17,32 @@ const EventDetailsScreen = ({ navigation, route }) => {
     const [venue, setVenue] = useState(null)
     const { itemId } = route.params;
     const { navigate } = useNavigation()
-    const fadeAnim = useRef(new Animated.Value(0)).current;
 
 
     useEffect(() => {
         let event = data.filter((item) => item.id === itemId)
         setEvent(() => event[0])
         // console.log(event)
-        fadeIn()
         if (event) {
-            getVenue(event.venue)
+            getVenue(event[0].venue)
         }
-    }, [event, itemId, getVenue])
+    }, [itemId, getVenue])
 
 
     const getVenue = useCallback(async (id) => {
         let { data: Venue, error } = await supabase
             .from('Venue')
-            .select(id)
-            .then(setVenue(Venue))
+            .select('*')
+            .eq('id', id)
+        if (Venue) setVenue(Venue[0])
 
+        console.log(venue)
         if (error) {
-            console.log('error getting venue', error)
+            console.error('error getting venue', error)
         }
-        setVenue(Venue[0])
-        // console.log(Venue)
-        return Venue
+
     }, []);
 
-
-    const fadeIn = () => {
-        // Will change fadeAnim value to 1 in 5 seconds
-        Animated.timing(fadeAnim, {
-            toValue: -100,
-            duration: 500,
-            useNativeDriver: true
-        }).start();
-    };
 
     return (
         <View style={styles.container}>
@@ -82,7 +71,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
 
                     <View style={styles.detailsContainer}>
 
-                        <Animatable.View animation="fadeInUp" easing='ease-out-cubic'>
+                        <Animatable.View animation="fadeInUp" easing='ease-out-expo' delay={100}>
                             <View style={styles.eventTypeButton}>
                                 <Text style={styles.eventTypeText} >{event.event_type}</Text>
                             </View>
@@ -101,18 +90,20 @@ const EventDetailsScreen = ({ navigation, route }) => {
                                 <Entypo name="location" size={24} color="black" />
                                 {venue ? (
                                     <View style={styles.textCon}>
-                                        <Text style={{ fontWeight: 'bold' }}>Club Paradise</Text>
-                                        <Text>{venue.address}</Text>
+                                        <Text style={{ fontWeight: 'bold' }}>{venue?.title}</Text>
+                                        <Text>{venue?.address}</Text>
                                     </View>
                                 ) : null}
                             </View>
-                        </Animatable.View>
 
-                        <Animatable.View animation="fadeInLeft" delay={300}>
                             <Divider />
+
                         </Animatable.View>
 
-                        <Animatable.View animation="fadeInUp" easing='ease-out-cubic'>
+                        {/* <Animatable.View animation="slideInUp" delay={200}>
+                        </Animatable.View> */}
+
+                        <Animatable.View animation="fadeInUp" easing='ease-out-expo' delay={300}>
                             <View style={styles.organizerContainer}>
                                 <Image style={styles.organizerImage} source={{ uri: "https://randomuser.me/api/portraits/thumb/men/7.jpg" }} />
                                 <View style={{ alignSelf: 'center' }}>
@@ -124,14 +115,16 @@ const EventDetailsScreen = ({ navigation, route }) => {
                                 <Text style={[styles.header, { marginBottom: 6 }]}>About Event</Text>
                                 <Text style={{ fontSize: 16 }}>{event.description}</Text>
                             </View>
-                            <Map latitude={venue?.latitude} longitude={venue?.longitude} />
+
+                            <Map coordinates={venue?.coordinates} />
+
                         </Animatable.View>
                     </View>
 
                 </ScrollView>
             }
 
-            <Animated.View style={[styles.bottomTab, { transform: [{ translateY: fadeAnim }] }]} >
+            <Animatable.View style={styles.bottomTab} animation='slideInUp' delay={400} easing='ease-out-expo' >
                 <View style={styles.shareBtnCon}>
                     <TouchableOpacity style={styles.shareBtn}>
                         <Entypo name="share" size={30} color="black" />
@@ -144,7 +137,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
                 </TouchableOpacity>
 
                 <Text style={styles.price}>${event?.price} /<Ionicons name='person' size={18} /> </Text>
-            </Animated.View>
+            </Animatable.View>
         </View >
     )
 }
@@ -229,7 +222,7 @@ const styles = StyleSheet.create({
         left: '-2.5%',
         width: '105%',
         position: 'absolute',
-        bottom: -100,
+        bottom: 0,
         backgroundColor: '#fff',
         borderWidth: 1,
         borderColor: '#E9EBED',
