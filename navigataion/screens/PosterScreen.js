@@ -1,15 +1,26 @@
-import { StyleSheet, View, Image } from 'react-native'
+import { useState } from 'react';
+import { StyleSheet, View, Image, ActivityIndicator } from 'react-native'
 import BackButton from '../../components/BackButton';
 
 
-const PosterScreen = ({ naviagtion, route }) => {
+const PosterScreen = ({ route }) => {
+    const { imageData } = route.params;
+    const [isPosterLoading, setIsPosterLoading] = useState(true)
 
     return (
         <View style={styles.container}>
             <BackButton />
 
+            {isPosterLoading &&
+                <View style={styles.spinnerContainer}>
+                    <ActivityIndicator size='small' color="#333" />
+                </View>
+            }
             <Image style={styles.poster}
-                source={{ uri: route.params?.imageData }} />
+                source={{ uri: imageData }}
+                onLoad={() => setIsPosterLoading(false)}
+                onError={() => setIsPosterLoading(false)}
+            />
         </View >
     )
 }
@@ -24,5 +35,11 @@ const styles = StyleSheet.create({
     poster: {
         flex: 1,
         resizeMode: 'contain',
+    },
+    spinnerContainer: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        position: 'absolute'
     }
 })

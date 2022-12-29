@@ -1,21 +1,24 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { Animated, StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, TouchableHighlight } from 'react-native'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
+import { Animated, StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, TouchableHighlight, ActivityIndicator } from 'react-native'
 import { useStoreState, useStoreActions } from 'easy-peasy'
+import { supabase } from '../../supabase/supabase';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import Divider from '../../components/Divider'
 import BackButton from '../../components/BackButton';
 import { useNavigation } from '@react-navigation/native';
-import { supabase } from '../../supabase/supabase';
 import Map from '../../components/Map';
+import * as Animatable from 'react-native-animatable';
 
 const EventDetailsScreen = ({ navigation, route }) => {
     const data = useStoreState((state) => state.events);
     const getEvent = useStoreActions(actions => actions.getEvent)
+    const [isPosterLoading, setIsPosterLoading] = useState(true);
     const [event, setEvent] = useState(null)
     const [venue, setVenue] = useState(null)
     const { itemId } = route.params;
     const { navigate } = useNavigation()
     const fadeAnim = useRef(new Animated.Value(0)).current;
+
 
     useEffect(() => {
         let event = data.filter((item) => item.id === itemId)
@@ -25,9 +28,10 @@ const EventDetailsScreen = ({ navigation, route }) => {
         if (event) {
             getVenue(event.venue)
         }
-    }, [event])
+    }, [event, itemId, getVenue])
 
-    async function getVenue(id) {
+
+    const getVenue = useCallback(async (id) => {
         let { data: Venue, error } = await supabase
             .from('Venue')
             .select(id)
@@ -39,7 +43,8 @@ const EventDetailsScreen = ({ navigation, route }) => {
         setVenue(Venue[0])
         // console.log(Venue)
         return Venue
-    }
+    }, []);
+
 
     const fadeIn = () => {
         // Will change fadeAnim value to 1 in 5 seconds
@@ -53,60 +58,75 @@ const EventDetailsScreen = ({ navigation, route }) => {
     return (
         <View style={styles.container}>
             <BackButton />
+
             {!event ?
                 <Text>Loading...</Text>
                 :
 
                 <ScrollView>
 
-                    <View>
-                        <TouchableHighlight onPress={() => navigate('Poster', { imageData: event.poster })}>
-                            <Image
-                                style={styles.poster}
-                                source={{ uri: event.poster }}
-                            />
-                        </TouchableHighlight>
-                    </View>
+                    {isPosterLoading &&
+                        <View style={styles.spinnerContainer}>
+                            <ActivityIndicator size='small' color="#333" style={styles.spinner} />
+                        </View>
+                    }
+                    <TouchableHighlight onPress={() => navigate('Poster', { imageData: event.poster })}>
+                        <Animatable.Image
+                            animation="fadeIn" easing='ease-out-cubic'
+                            style={styles.poster}
+                            source={{ uri: event.poster }}
+                            onLoad={() => setIsPosterLoading(false)}
+                            onError={() => setIsPosterLoading(false)}
+                        />
+                    </TouchableHighlight>
 
                     <View style={styles.detailsContainer}>
-                        <View style={styles.eventTypeButton}>
-                            <Text style={styles.eventTypeText} >{event.event_type}</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.title}>{event.title}</Text>
-                        </View>
-                        <View style={styles.flexRow}>
-                            <Entypo name="calendar" size={24} color="black" />
-                            <View style={styles.textCon}>
-                                <Text style={{ fontWeight: 'bold' }}>{event.start_date}</Text>
-                                <Text>Saturday, 4:00 PM - 10:00 PM</Text>
-                            </View>
-                        </View>
 
-                        <View style={styles.flexRow}>
-                            <Entypo name="location" size={24} color="black" />
-                            <View style={styles.textCon}>
-                                <Text style={{ fontWeight: 'bold' }}>Club Paradise</Text>
-                                <Text>{venue?.address}</Text>
+                        <Animatable.View animation="fadeInUp" easing='ease-out-cubic'>
+                            <View style={styles.eventTypeButton}>
+                                <Text style={styles.eventTypeText} >{event.event_type}</Text>
                             </View>
-                        </View>
-
-                        <Divider />
-
-                        <View style={styles.organizerContainer}>
-                            <Image style={styles.organizerImage} source={{ uri: "https://randomuser.me/api/portraits/thumb/men/7.jpg" }} />
-                            <View style={{ alignSelf: 'center' }}>
-                                <Text style={[styles.header, { marginBottom: 2 }]}>{event.organizer}</Text>
-                                <Text style={styles.subText}>Organizer</Text>
+                            <View>
+                                <Text style={styles.title}>{event.title}</Text>
                             </View>
-                        </View>
-                        <View style={{ paddingBottom: 40 }}>
-                            <Text style={[styles.header, { marginBottom: 6 }]}>About Event</Text>
-                            <Text style={{ fontSize: 16 }}>{event.description}</Text>
-                        </View>
-                        <Map latitude={venue?.latitude} longitude={venue?.longitude} />
+                            <View style={styles.flexRow}>
+                                <Entypo name="calendar" size={24} color="black" />
+                                <View style={styles.textCon}>
+                                    <Text style={{ fontWeight: 'bold' }}>{event.start_date}</Text>
+                                    <Text>Saturday, 4:00 PM - 10:00 PM</Text>
+                                </View>
+                            </View>
+
+                            <View style={styles.flexRow}>
+                                <Entypo name="location" size={24} color="black" />
+                                {venue ? (
+                                    <View style={styles.textCon}>
+                                        <Text style={{ fontWeight: 'bold' }}>Club Paradise</Text>
+                                        <Text>{venue.address}</Text>
+                                    </View>
+                                ) : null}
+                            </View>
+                        </Animatable.View>
+
+                        <Animatable.View animation="fadeInLeft" delay={300}>
+                            <Divider />
+                        </Animatable.View>
+
+                        <Animatable.View animation="fadeInUp" easing='ease-out-cubic'>
+                            <View style={styles.organizerContainer}>
+                                <Image style={styles.organizerImage} source={{ uri: "https://randomuser.me/api/portraits/thumb/men/7.jpg" }} />
+                                <View style={{ alignSelf: 'center' }}>
+                                    <Text style={[styles.header, { marginBottom: 2 }]}>{event.organizer}</Text>
+                                    <Text style={styles.subText}>Organizer</Text>
+                                </View>
+                            </View>
+                            <View style={{ paddingBottom: 40 }}>
+                                <Text style={[styles.header, { marginBottom: 6 }]}>About Event</Text>
+                                <Text style={{ fontSize: 16 }}>{event.description}</Text>
+                            </View>
+                            <Map latitude={venue?.latitude} longitude={venue?.longitude} />
+                        </Animatable.View>
                     </View>
-
 
                 </ScrollView>
             }
@@ -140,6 +160,12 @@ const styles = StyleSheet.create({
     poster: {
         height: 350,
         resizeMode: 'cover'
+    },
+    spinnerContainer: {
+        height: 350,
+        width: '100%',
+        justifyContent: 'center',
+        position: 'absolute'
     },
     detailsContainer: {
         paddingHorizontal: '4%',
