@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, FlatList } from 'react-native'
-// import { FlashList } from "@shopify/flash-list";
 import EventCard from '../../components/EventCard';
 import FeaturedEventCard from '../../components/FeaturedEventCard';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -25,16 +24,16 @@ const HomeScreen = ({ navigation }) => {
         }
     }
 
-    const eventCard = ({ item }) => (
+    const eventCard = ({ item, index }) => (
         <TouchableOpacity
             onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
-            <EventCard data={item} />
+            <EventCard data={item} index={index} />
         </TouchableOpacity>
     );
 
     return (
         <SafeAreaView style={styles.container}>
-            <View>
+            <ScrollView>
 
                 <View style={styles.topContainer} >
                     <View style={styles.searchContainer}>
@@ -59,7 +58,7 @@ const HomeScreen = ({ navigation }) => {
                     <TouchableOpacity><Text>View all</Text></TouchableOpacity>
                 </View>
 
-                <View>
+                <View style={styles.listCon}>
                     <FlatList
                         data={data}
                         renderItem={eventCard}
@@ -67,6 +66,7 @@ const HomeScreen = ({ navigation }) => {
                         horizontal
                         initialNumToRender={5}
                         removeClippedSubviews
+                        showsHorizontalScrollIndicator={false}
                     />
                 </View>
 
@@ -82,10 +82,11 @@ const HomeScreen = ({ navigation }) => {
                         horizontal
                         initialNumToRender={5}
                         removeClippedSubviews
+                        showsHorizontalScrollIndicator={false}
                     />
                 </View>
 
-            </View>
+            </ScrollView>
         </SafeAreaView>
     )
 }
@@ -148,4 +149,8 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: '500',
     },
+    listCon: {
+        width: '100%',
+        height: 230
+    }
 });
