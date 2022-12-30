@@ -35,7 +35,7 @@ const Map = ({ coordinates }) => {
     // }
 
     const handlePress = () => {
-        let url = `https://maps.google.com?saddr=Current+Location&daddr=${coordinates[0]},${coordinates[1]}`;
+        let url = `https://www.google.com/maps/dir/?api=1&destination=${coordinates[0]},${coordinates[1]}`;
         // `http://maps.apple.com/?saddr=Current+Location&daddr=${coordinates[0]},${coordinates[1]}`;
 
         Linking.canOpenURL(url).then(supported => {
