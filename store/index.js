@@ -10,10 +10,16 @@ const store = createStore(
         deleteEvent: action((state, id) => {
             state.events.filter((item) => item !== id)
         }),
+        // auth session
         session: null,
         setSession: action((state, payload) => {
             state.session = payload
-        })
+        }),
+        // search results
+        searchResults: [],
+        setSearchResults: action((state, payload) => {
+            state.searchResults = payload
+        }),
     })
 )
 
