@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { Text, Button, Linking, StyleSheet, View } from 'react-native'
+import { Button, Linking, StyleSheet, View } from 'react-native'
 import { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 
@@ -27,16 +27,15 @@ const Map = ({ coordinates }) => {
         })();
     }, []);
 
-    let text = 'Waiting..';
-    if (errorMsg) {
-        text = errorMsg;
-    } else if (location) {
-        text = JSON.stringify(location);
-    }
+    // let text = 'Waiting..';
+    // if (errorMsg) {
+    //     text = errorMsg;
+    // } else if (location) {
+    //     text = JSON.stringify(location);
+    // }
 
     const handlePress = () => {
-        let url;
-        `https://maps.google.com?saddr=Current+Location&daddr=${coordinates[0]},${coordinates[1]}`;
+        let url = `https://maps.google.com?saddr=Current+Location&daddr=${coordinates[0]},${coordinates[1]}`;
         // `http://maps.apple.com/?saddr=Current+Location&daddr=${coordinates[0]},${coordinates[1]}`;
 
         Linking.canOpenURL(url).then(supported => {
@@ -63,7 +62,6 @@ const Map = ({ coordinates }) => {
                 <Marker coordinate={{ latitude: location?.coords.latitude, longitude: location?.coords.longitude }} pinColor='red' />
             </MapView>
             <Button title="Get Directions" onPress={handlePress} />
-            <Text>{text}</Text>
         </View>
     )
 }
