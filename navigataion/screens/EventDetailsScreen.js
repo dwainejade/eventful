@@ -7,6 +7,7 @@ import Divider from '../../components/Divider'
 import BackButton from '../../components/BackButton';
 import { useNavigation } from '@react-navigation/native';
 import Map from '../../components/Map';
+import { format, parseISO } from "date-fns";
 import * as Animatable from 'react-native-animatable';
 
 const EventDetailsScreen = ({ navigation, route }) => {
@@ -81,7 +82,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
                             <View style={styles.flexRow}>
                                 <Entypo name="calendar" size={24} color="black" />
                                 <View style={styles.textCon}>
-                                    <Text style={{ fontWeight: 'bold' }}>{event.start_date}</Text>
+                                    <Text style={{ fontWeight: 'bold' }}>{format(parseISO(event.start_date), "MMMM - dd - Y")}</Text>
                                     <Text>Saturday, 4:00 PM - 10:00 PM</Text>
                                 </View>
                             </View>
