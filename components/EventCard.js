@@ -25,7 +25,7 @@ const EventCard = ({ data, index }) => {
                     <ActivityIndicator size='small' color="#333" />
                 </View>
             }
-            <Animatable.View style={styles.container} animation='zoomIn' duration={800} easing="ease-out-circ" delay={index * 20} onAnimationBegin={() => setIsLoading(false)}>
+            <Animatable.View style={styles.container} animation='zoomIn' easing="ease-out-circ" onAnimationBegin={() => setIsLoading(false)}>
                 <View style={styles.cardTop}>
                     <Image
                         style={styles.image}
