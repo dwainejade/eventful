@@ -36,7 +36,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
             .eq('id', id)
         if (Venue) setVenue(Venue[0])
 
-        console.log(venue)
+        // console.log(venue)
         if (error) {
             console.error('error getting venue', error)
         }
