@@ -33,7 +33,7 @@ const EventCard = ({ data, index }) => {
         if (Venue) setAddress(Venue[0].address)
 
         if (error) {
-            console.log('error getting address', error)
+            return null
         }
 
     }, []);
