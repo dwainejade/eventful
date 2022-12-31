@@ -1,13 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { supabase } from '../supabase/supabase';
 import { format, parseISO } from "date-fns";
 import * as Animatable from 'react-native-animatable';
 
 const EventCard = ({ data, index }) => {
     const [buttonState, setButtonState] = useState(data.isLiked);
     const [isLoading, setIsLoading] = useState(true)
-
+    const [address, setAddress] = useState('')
+    const MAX_LENGTH = 30;
     let buttonColor
     let buttonType
     if (buttonState) {
@@ -17,6 +19,24 @@ const EventCard = ({ data, index }) => {
         buttonColor = '#fff';
         buttonType = 'heart-outline'
     }
+
+    useEffect(() => {
+        getVenue(data.venue)
+    }, [])
+
+
+    const getVenue = useCallback(async (id) => {
+        let { data: Venue, error } = await supabase
+            .from('Venue')
+            .select('address')
+            .eq('id', id)
+        if (Venue) setAddress(Venue[0].address)
+
+        if (error) {
+            console.log('error getting address', error)
+        }
+
+    }, []);
 
     return (
         <>
@@ -41,7 +61,7 @@ const EventCard = ({ data, index }) => {
                     <Pressable style={styles.eventTypeButton}>
                         <Text style={styles.eventTypeText} >{data.event_type}</Text>
                     </Pressable>
-                    <Text style={styles.address}><Ionicons name='location' size={10} />{data.venue}</Text>
+                    <Text style={styles.address}><Ionicons name='location' size={10} />{address.length > MAX_LENGTH ? `${address.substring(0, MAX_LENGTH)}...` : address}</Text>
                 </View>
             </Animatable.View>
         </>
@@ -127,7 +147,7 @@ const styles = StyleSheet.create({
         fontSize: 11,
     },
     address: {
-        fontSize: 10,
+        fontSize: 12,
         color: '#333',
     }
 })
