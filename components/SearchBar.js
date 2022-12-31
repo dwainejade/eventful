@@ -14,12 +14,10 @@ const SearchBar = ({ setSearchResults }) => {
             .from('Events')
             .select()
             .textSearch('title', searchQuery)
-            .then((res) => {
-                setSearchResults(res.data)
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        if (Events) setSearchResults(Events)
+        else console.log(error)
+
+        // console.log(error)
     }
 
     return (
@@ -31,6 +29,7 @@ const SearchBar = ({ setSearchResults }) => {
                     onChangeText={(text) => setSearchValue(text)}
                     onSubmitEditing={() => handleSearch()}
                     autoCapitalize={false}
+                    autoCorrect={false}
                 />
                 <TouchableOpacity onPress={() => handleSearch()} style={styles.searchIcon}>
                     <Ionicons name='search' size={15} />
