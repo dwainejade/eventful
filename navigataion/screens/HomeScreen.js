@@ -58,6 +58,8 @@ const HomeScreen = ({ navigation }) => {
                         initialNumToRender={5}
                         removeClippedSubviews
                         showsHorizontalScrollIndicator={false}
+                        snapToInterval={216}
+                        snapToAlignment='start'
                     />
                 </View>
 
@@ -74,6 +76,9 @@ const HomeScreen = ({ navigation }) => {
                         initialNumToRender={5}
                         removeClippedSubviews
                         showsHorizontalScrollIndicator={false}
+                        snapToInterval={216}
+                        snapToAlignment='start'
+                        decelerationRate='fast'
                     />
                 </View>
 
@@ -87,7 +92,7 @@ export default HomeScreen
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#f1f1f1',
     },
     mainContainer: {
     },
