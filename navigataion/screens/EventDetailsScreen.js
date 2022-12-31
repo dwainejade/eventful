@@ -18,6 +18,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
     const [venue, setVenue] = useState(null)
     const { itemId } = route.params;
     const { navigate } = useNavigation()
+    const scrollRef = useRef()
 
 
     useEffect(() => {
@@ -36,12 +37,10 @@ const EventDetailsScreen = ({ navigation, route }) => {
             .select('*')
             .eq('id', id)
         if (Venue) setVenue(Venue[0])
-
         // console.log(venue)
         if (error) {
-            console.log('error getting venue', error)
+            return null
         }
-
     }, []);
 
 
@@ -53,7 +52,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
                 <Text>Loading...</Text>
                 :
 
-                <ScrollView>
+                <ScrollView ref={scrollRef}>
 
                     {isPosterLoading &&
                         <View style={styles.spinnerContainer}>
@@ -87,15 +86,17 @@ const EventDetailsScreen = ({ navigation, route }) => {
                                 </View>
                             </View>
 
-                            <View style={styles.flexRow}>
-                                <Entypo name="location" size={24} color="black" />
-                                {venue ? (
-                                    <View style={styles.textCon}>
-                                        <Text style={{ fontWeight: 'bold' }}>{venue?.title}</Text>
-                                        <Text>{venue?.address}</Text>
-                                    </View>
-                                ) : null}
-                            </View>
+                            <TouchableOpacity onPress={() => scrollRef.current.scrollToEnd({ animated: true })}>
+                                <View style={styles.flexRow} >
+                                    <Entypo name="location" size={24} color="black" />
+                                    {venue ? (
+                                        <View style={styles.textCon}>
+                                            <Text style={{ fontWeight: 'bold' }}>{venue?.title}</Text>
+                                            <Text>{venue?.address}</Text>
+                                        </View>
+                                    ) : null}
+                                </View>
+                            </TouchableOpacity>
 
                             <Divider />
 
