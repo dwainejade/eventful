@@ -39,7 +39,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
 
         // console.log(venue)
         if (error) {
-            console.error('error getting venue', error)
+            console.log('error getting venue', error)
         }
 
     }, []);
@@ -117,7 +117,10 @@ const EventDetailsScreen = ({ navigation, route }) => {
                                 <Text style={{ fontSize: 16 }}>{event.description}</Text>
                             </View>
 
-                            <Map coordinates={venue?.coordinates} />
+                            {
+                                venue?.coordinates &&
+                                <Map coordinates={venue.coordinates} title={venue.title} />
+                            }
 
                         </Animatable.View>
                     </View>
@@ -138,6 +141,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
                 </TouchableOpacity>
 
                 <Text style={styles.price}>${event?.price} /<Ionicons name='person' size={18} /> </Text>
+
             </Animatable.View>
         </View >
     )
@@ -153,7 +157,7 @@ const styles = StyleSheet.create({
     },
     poster: {
         height: 350,
-        resizeMode: 'cover'
+        resizeMode: 'cover',
     },
     spinnerContainer: {
         height: 350,

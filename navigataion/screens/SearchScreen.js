@@ -1,16 +1,19 @@
 import React from 'react'
-import { StyleSheet, SafeAreaView, View, ScrollView, FlatList, TouchableOpacity } from 'react-native'
+import { StyleSheet, SafeAreaView, View, ScrollView, FlatList, TouchableOpacity, Text, Image } from 'react-native'
 import SearchBar from '../../components/SearchBar'
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import EventCard from '../../components/EventCard';
+import { useNavigation } from '@react-navigation/native';
+import bg from '../../assets/city.png'
 
 const SearchScreen = () => {
     const data = useStoreState((state) => state.searchResults);
     const setSearchResults = useStoreActions((actions) => actions.setSearchResults);
+    const { navigate } = useNavigation()
 
     const eventCard = ({ item, index }) => (
         <TouchableOpacity
-            onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
+            onPress={() => navigate('EventDetails', { itemId: item.id })}>
             <EventCard data={item} index={index} />
         </TouchableOpacity>
     );
@@ -21,14 +24,19 @@ const SearchScreen = () => {
             <SearchBar setSearchResults={setSearchResults} />
 
             <View style={styles.listCon}>
-                <FlatList
-                    data={data}
-                    renderItem={eventCard}
-                    keyExtractor={item => item.id}
-                    initialNumToRender={5}
-                    removeClippedSubviews
-                    showsHorizontalScrollIndicator={false}
-                />
+                {data.length ?
+                    <FlatList
+                        data={data}
+                        renderItem={eventCard}
+                        keyExtractor={item => item.id}
+                        initialNumToRender={10}
+                        removeClippedSubviews
+                        showsHorizontalScrollIndicator={false}
+                    />
+                    :
+                    <Image source={require('../../assets/city.png')} style={styles.bg} />
+                }
+
             </View>
         </SafeAreaView>
     )
@@ -42,6 +50,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     mainContainer: {
-        // flex: 1
     },
+    bg: {
+        flex: 1,
+        resizeMode: "cover",
+        minHeight: 360,
+        width: '100%',
+        marginTop: '20%'
+    }
 })

@@ -28,7 +28,10 @@ const SearchBar = ({ setSearchResults }) => {
                 <TextInput style={styles.searchInput}
                     placeholder='Search'
                     value={searchValue}
-                    onChangeText={(text) => setSearchValue(text)} />
+                    onChangeText={(text) => setSearchValue(text)}
+                    onSubmitEditing={() => handleSearch()}
+                    autoCapitalize={false}
+                />
                 <TouchableOpacity onPress={() => handleSearch()} style={styles.searchIcon}>
                     <Ionicons name='search' size={15} />
                 </TouchableOpacity>
@@ -57,6 +60,7 @@ const styles = StyleSheet.create({
         right: 12,
     },
     searchInput: {
-        flex: 1
+        flex: 1,
+        zIndex: 4
     },
 })

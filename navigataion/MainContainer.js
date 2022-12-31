@@ -12,6 +12,7 @@ import ProfileScreen from './screens/ProfileScreen';
 import LoginStack from './LoginStack'
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import SearchScreen from './screens/SearchScreen';
+import SearchStack from './SearchStack';
 
 // screen names
 const homeName = 'Home';

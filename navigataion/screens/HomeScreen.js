@@ -16,7 +16,10 @@ const HomeScreen = ({ navigation }) => {
 
     async function getEvents() {
         try {
-            const { data: Events } = await supabase.from('Events').select('*');
+            const { data: Events } = await supabase
+                .from('Events')
+                .select('*')
+                .order('start_date');
             setEvents(Events);
         } catch (error) {
             console.error(error);
@@ -42,7 +45,7 @@ const HomeScreen = ({ navigation }) => {
                 <FeaturedEventCard data={data} />
 
                 <View style={styles.headingContainer}>
-                    <Text style={styles.heading}>Trending</Text>
+                    <Text style={styles.heading}>Upcoming</Text>
                     <TouchableOpacity><Text>View all</Text></TouchableOpacity>
                 </View>
 
@@ -87,7 +90,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     mainContainer: {
-        // marginTop: 30
     },
     locationButton: {
         height: 35,

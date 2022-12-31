@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { StyleSheet, View, Image, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, ActivityIndicator } from 'react-native'
 import BackButton from '../../components/BackButton';
+import * as Animatable from 'react-native-animatable';
 
 
 const PosterScreen = ({ route }) => {
@@ -16,7 +17,9 @@ const PosterScreen = ({ route }) => {
                     <ActivityIndicator size='small' color="#333" />
                 </View>
             }
-            <Image style={styles.poster}
+
+            <Animatable.Image animation='slideInDown' duration={1200} easing='ease-out-cubic' useNativeDriver
+                style={styles.poster}
                 source={{ uri: imageData }}
                 onLoad={() => setIsPosterLoading(false)}
                 onError={() => setIsPosterLoading(false)}
