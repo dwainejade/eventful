@@ -10,6 +10,7 @@ const EventCard = ({ data, index }) => {
     const [isLoading, setIsLoading] = useState(true)
     const [address, setAddress] = useState('')
     const MAX_LENGTH = 30;
+
     let buttonColor
     let buttonType
     if (buttonState) {
@@ -34,6 +35,7 @@ const EventCard = ({ data, index }) => {
 
         if (error) {
             return null
+            // console.log('error getting address', error)
         }
 
     }, []);
@@ -45,8 +47,8 @@ const EventCard = ({ data, index }) => {
                     <ActivityIndicator size='small' color="#333" />
                 </View>
             }
-            <Animatable.View style={styles.container} animation='zoomIn' easing="ease-out-circ" onAnimationBegin={() => setIsLoading(false)}>
-                <View style={styles.cardTop}>
+            <Animatable.View style={styles.cardContainer} animation='zoomIn' easing="ease-out-circ" onAnimationBegin={() => setIsLoading(false)}>
+                <View style={styles.cardLeft}>
                     <Image
                         style={styles.image}
                         source={{ uri: data.poster }}
@@ -56,12 +58,12 @@ const EventCard = ({ data, index }) => {
                     </Pressable>
                     <Text style={styles.date}>{format(parseISO(data.start_date), "dd MMM")}</Text>
                 </View>
-                <View style={styles.cardBottom}>
+                <View style={styles.cardRight}>
                     <Text style={styles.title}>{data.title}</Text>
                     <Pressable style={styles.eventTypeButton}>
                         <Text style={styles.eventTypeText} >{data.event_type}</Text>
                     </Pressable>
-                    <Text style={styles.address}><Ionicons name='location' size={10} />{address.length > MAX_LENGTH ? `${address.substring(0, MAX_LENGTH)}...` : address}</Text>
+                    <Text style={styles.address}><Ionicons name='location' size={10} />{address}</Text>
                 </View>
             </Animatable.View>
         </>
@@ -72,30 +74,30 @@ const EventCard = ({ data, index }) => {
 export default EventCard
 
 const styles = StyleSheet.create({
-    container: {
-        width: 200,
-        height: 220,
-        borderWidth: 1,
-        borderColor: '#E9EBED',
-        borderRadius: 12,
-        shadowRadius: 1,
-        elevation: 5,
-        margin: 2,
-        marginHorizontal: 8
-    },
     spinnerContainer: {
         flex: 1,
         justifyContent: 'center',
         position: 'absolute',
         top: 100
     },
-    cardTop: {
-        height: '65%'
+    cardContainer: {
+        height: 150,
+        borderWidth: 1,
+        borderColor: '#E9EBED',
+        borderRadius: 12,
+        shadowRadius: 1,
+        elevation: 5,
+        margin: 4,
+        flexDirection: 'row'
+    },
+    cardLeft: {
+        height: '100%',
+        width: '40%'
     },
     image: {
         flex: 1,
         resizeMode: "cover",
-        borderTopRightRadius: 12,
+        borderBottomLeftRadius: 12,
         borderTopLeftRadius: 12,
     },
     likeButton: {
@@ -121,14 +123,13 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         padding: 1
     },
-    cardBottom: {
-        backgroundColor: '#fff',
-        height: 80,
-        padding: 8,
+    cardRight: {
         flex: 1,
-        borderBottomRightRadius: 12,
-        borderBottomLeftRadius: 12,
-        justifyContent: 'space-between'
+        backgroundColor: '#fff',
+        padding: 12,
+        borderRadius: 12,
+        flexDirection: 'column',
+        justifyContent: 'space-evenly'
     },
     title: {
         fontSize: 16,

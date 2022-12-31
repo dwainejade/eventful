@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, FlatList } from 'react-native'
-// import { FlashList } from "@shopify/flash-list";
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native'
 import EventCard from '../../components/EventCard';
 import FeaturedEventCard from '../../components/FeaturedEventCard';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import 'react-native-url-polyfill/auto' // need this for supabase to work 🤷🏽‍♂️
 import { supabase } from '../../supabase/supabase';
@@ -17,36 +15,28 @@ const HomeScreen = ({ navigation }) => {
     }, [])
 
     async function getEvents() {
-        let { data: Events, error } = await supabase
-            .from('Events')
-            .select('*')
-        setEvents(Events)
-        if (error) console.log(error)
-        // console.log(Events)
+        try {
+            const { data: Events } = await supabase
+                .from('Events')
+                .select('*')
+                .order('start_date');
+            setEvents(Events);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
-    const eventCard = ({ item }) => (
+    const eventCard = ({ item, index }) => (
         <TouchableOpacity
             onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
-            <EventCard data={item} />
+            <EventCard data={item} index={index} />
         </TouchableOpacity>
     );
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView>
 
-                <View style={styles.topContainer} >
-                    <View style={styles.searchContainer}>
-                        <TextInput style={styles.searchInput} />
-                        <Ionicons name='search' size={15} style={styles.searchIcon} />
-                    </View>
-
-                    <TouchableOpacity style={styles.locationButton} >
-                        <Ionicons style={styles.locationIcon} name='location' size={20} />
-                    </TouchableOpacity>
-                </View>
-
+            <ScrollView style={styles.mainContainer}>
                 <View style={styles.headingContainer}>
                     <Text style={styles.heading}>Featured</Text>
                     <TouchableOpacity><Text>View all</Text></TouchableOpacity>
@@ -55,26 +45,11 @@ const HomeScreen = ({ navigation }) => {
                 <FeaturedEventCard data={data} />
 
                 <View style={styles.headingContainer}>
-                    <Text style={styles.heading}>Trending</Text>
+                    <Text style={styles.heading}>Upcoming</Text>
                     <TouchableOpacity><Text>View all</Text></TouchableOpacity>
                 </View>
 
-                <View>
-                    {/* <FlashList
-                        data={data}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
-                                <EventCard
-                                    data={item}
-                                />
-                            </TouchableOpacity>
-                        )}
-                        keyExtractor={(item, index) => index}
-                        estimatedItemSize={50}
-                        horizontal
-                    /> */}
-
+                <View style={styles.listCon}>
                     <FlatList
                         data={data}
                         renderItem={eventCard}
@@ -82,6 +57,7 @@ const HomeScreen = ({ navigation }) => {
                         horizontal
                         initialNumToRender={5}
                         removeClippedSubviews
+                        showsHorizontalScrollIndicator={false}
                     />
                 </View>
 
@@ -89,7 +65,7 @@ const HomeScreen = ({ navigation }) => {
                     <Text style={styles.heading}>Nearby</Text>
                     <TouchableOpacity><Text>View all</Text></TouchableOpacity>
                 </View>
-                <View>
+                <View >
                     <FlatList
                         data={data}
                         renderItem={eventCard}
@@ -97,25 +73,9 @@ const HomeScreen = ({ navigation }) => {
                         horizontal
                         initialNumToRender={5}
                         removeClippedSubviews
+                        showsHorizontalScrollIndicator={false}
                     />
                 </View>
-                {/* <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                >
-                    {
-                        data.map((item) => (
-                            <TouchableOpacity
-                                key={item.id}
-                                onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
-                                <EventCard
-                                    data={item}
-                                />
-                            </TouchableOpacity>
-                        )
-                        )}
-                </ScrollView> */}
-
 
             </ScrollView>
         </SafeAreaView>
@@ -128,33 +88,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        flexDirection: 'row'
     },
-    topContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        marginHorizontal: 10,
-        marginVertical: 6
-    },
-    searchInput: {
-        flex: 1
-    },
-    searchIcon: {
-        position: 'absolute',
-        right: 12
-    },
-    searchContainer: {
-        backgroundColor: '#E9EBED',
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        height: 35,
-        paddingVertical: 4,
-        paddingHorizontal: 14,
-        borderRadius: 20,
-        marginRight: 8
+    mainContainer: {
     },
     locationButton: {
         height: 35,
@@ -171,6 +106,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         margin: 2,
         marginHorizontal: 6,
+        marginTop: 10,
         height: 16
     },
     heading: {
@@ -180,4 +116,8 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: '500',
     },
+    listCon: {
+        width: '100%',
+        height: 230
+    }
 });

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Alert, StyleSheet, View, TouchableOpacity, Image, Text, TextInput, SafeAreaView } from 'react-native'
+import React, { useState, useRef } from 'react'
+import { Alert, StyleSheet, View, TouchableOpacity, Image, Text, TextInput, SafeAreaView, ActivityIndicator } from 'react-native'
 import Checkbox from 'expo-checkbox';
 import { supabase } from '../../supabase/supabase'
 import logo from '../../assets/splash.png'
@@ -11,6 +11,7 @@ export default function Auth() {
     const [loading, setLoading] = useState(false)
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const navigation = useNavigation()
+    const passRef = useRef()
 
     async function signInWithEmail() {
         setLoading(true)
@@ -28,27 +29,33 @@ export default function Auth() {
         <SafeAreaView style={styles.container}>
 
             <Image source={logo} resizeMethod='contain' style={styles.logo} />
+            {loading &&
+                <ActivityIndicator style={styles.spinner} size='large' />
+            }
 
             <View style={[styles.verticallySpaced]}>
                 <TextInput style={styles.input}
                     label="Email"
-                    // leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+                    returnKeyType="next"
                     onChangeText={(text) => setEmail(text)}
                     value={email}
                     placeholder="Email"
                     autoCapitalize={'none'}
+                    onSubmitEditing={() => passRef.current.focus()}
+                    blurOnSubmit={false}
                 />
             </View>
 
             <View style={styles.verticallySpaced}>
                 <TextInput style={styles.input}
                     label="Password"
-                    // leftIcon={{ type: 'font-awesome', name: 'lock' }}
+                    ref={passRef}
                     onChangeText={(text) => setPassword(text)}
                     value={password}
                     secureTextEntry={!toggleCheckBox}
                     placeholder="Password"
                     autoCapitalize={'none'}
+                    onSubmitEditing={signInWithEmail}
                 />
             </View>
 
@@ -145,5 +152,10 @@ const styles = StyleSheet.create({
     link: {
         color: 'dodgerblue',
         fontWeight: 'bold'
+    },
+    spinner: {
+        position: 'absolute',
+        top: '20%',
+        alignSelf: 'center'
     }
 })
