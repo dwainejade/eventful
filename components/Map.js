@@ -4,7 +4,7 @@ import { Button, Linking, StyleSheet, View } from 'react-native'
 import { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 
-const Map = ({ coordinates }) => {
+const Map = ({ coordinates, title }) => {
     if (!coordinates) {
         return null;
     }
@@ -51,6 +51,7 @@ const Map = ({ coordinates }) => {
         <View style={styles.container}>
             <MapView style={styles.map}
                 provider={PROVIDER_GOOGLE}
+                // customMapStyle={mapStyle}
                 initialRegion={{
                     latitude: latitude,
                     longitude: longitude,
@@ -58,7 +59,7 @@ const Map = ({ coordinates }) => {
                     longitudeDelta: 0.003,
                 }}
             >
-                <Marker coordinate={{ latitude: latitude, longitude: longitude }} pinColor='green' />
+                <Marker coordinate={{ latitude: latitude, longitude: longitude }} pinColor='green' title={title} />
                 <Marker coordinate={{ latitude: location?.coords.latitude, longitude: location?.coords.longitude }} pinColor='red' />
             </MapView>
             <Button title="Get Directions" onPress={handlePress} />
