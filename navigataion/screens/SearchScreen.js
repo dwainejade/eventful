@@ -1,20 +1,20 @@
 import React from 'react'
-import { StyleSheet, SafeAreaView, View, ScrollView, FlatList, TouchableOpacity, Text, Image } from 'react-native'
+import { StyleSheet, SafeAreaView, View, FlatList, TouchableOpacity, Image } from 'react-native'
 import SearchBar from '../../components/SearchBar'
 import { useStoreActions, useStoreState } from 'easy-peasy';
-import EventCard from '../../components/EventCard';
+import SearchEventCard from '../../components/SearchEventCard';
 import { useNavigation } from '@react-navigation/native';
-import bg from '../../assets/city.png'
+
 
 const SearchScreen = () => {
     const data = useStoreState((state) => state.searchResults);
     const setSearchResults = useStoreActions((actions) => actions.setSearchResults);
     const { navigate } = useNavigation()
 
-    const eventCard = ({ item, index }) => (
+    const searchEventCard = ({ item, index }) => (
         <TouchableOpacity
             onPress={() => navigate('EventDetails', { itemId: item.id })}>
-            <EventCard data={item} index={index} />
+            <SearchEventCard data={item} index={index} />
         </TouchableOpacity>
     );
 
@@ -23,21 +23,20 @@ const SearchScreen = () => {
 
             <SearchBar setSearchResults={setSearchResults} />
 
-            <View style={styles.listCon}>
-                {data.length ?
-                    <FlatList
-                        data={data}
-                        renderItem={eventCard}
-                        keyExtractor={item => item.id}
-                        initialNumToRender={10}
-                        removeClippedSubviews
-                        showsHorizontalScrollIndicator={false}
-                    />
-                    :
-                    <Image source={require('../../assets/city.png')} style={styles.bg} />
-                }
+            {data.length ?
 
-            </View>
+                <FlatList
+                    data={data}
+                    renderItem={searchEventCard}
+                    keyExtractor={item => item.id}
+                    initialNumToRender={10}
+                    removeClippedSubviews
+                    showsHorizontalScrollIndicator={false}
+                />
+
+                :
+                <Image source={require('../../assets/city.png')} style={styles.bg} />
+            }
         </SafeAreaView>
     )
 }
