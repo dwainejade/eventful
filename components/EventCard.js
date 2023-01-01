@@ -1,42 +1,34 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState } from 'react'
 import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useStoreState, useStoreActions } from 'easy-peasy';
 import { supabase } from '../supabase/supabase';
 import { format, parseISO } from "date-fns";
 import * as Animatable from 'react-native-animatable';
 
-const EventCard = ({ data, index }) => {
-    const [buttonState, setButtonState] = useState(data.isLiked);
+const EventCard = ({ data, address, userId }) => {
     const [isLoading, setIsLoading] = useState(true)
-    const [address, setAddress] = useState('')
+    const likedEvents = useStoreState((state) => state.likedEvents);
+    const addLikedEvent = useStoreActions((actions) => actions.addLikedEvent);
+    const removeLikedEvent = useStoreActions((actions) => actions.removeLikedEvent);
     const MAX_LENGTH = 30;
-    let buttonColor
-    let buttonType
-    if (buttonState) {
-        buttonColor = '#fff';
-        buttonType = 'heart'
-    } else {
-        buttonColor = '#fff';
-        buttonType = 'heart-outline'
+
+    const updateServer = async () => {
+        const { data, error } = await supabase
+            .from('profiles')
+            .update({ liked_events: likedEvents })
+            .eq('id', userId)
     }
 
-    useEffect(() => {
-        getVenue(data.venue)
-    }, [])
+    const handleLike = () => {
+        addLikedEvent(data.id)
+        updateServer()
+    }
 
-
-    const getVenue = useCallback(async (id) => {
-        let { data: Venue, error } = await supabase
-            .from('Venue')
-            .select('address')
-            .eq('id', id)
-        if (Venue) setAddress(Venue[0].address)
-
-        if (error) {
-            return null
-        }
-
-    }, []);
+    const handleUnlike = () => {
+        removeLikedEvent(data.id)
+        updateServer()
+    }
 
     return (
         <>
@@ -47,22 +39,36 @@ const EventCard = ({ data, index }) => {
             }
             <Animatable.View style={styles.container} animation='zoomIn' easing="ease-out-circ" onAnimationBegin={() => setIsLoading(false)}>
                 <View style={styles.cardTop}>
-                    <Image
-                        style={styles.image}
-                        source={{ uri: data.poster }}
-                    />
-                    <Pressable style={styles.likeButton} onPress={() => setButtonState(!buttonState)}>
-                        <Ionicons name={buttonType} size={22} color={buttonColor} />
-                    </Pressable>
+                    <View style={{ overflow: 'hidden' }}>
+
+                        <Image
+                            style={styles.image}
+                            source={{ uri: data.poster }}
+                        />
+                    </View>
+
+                    {likedEvents.includes(data.id) ?
+                        <Pressable style={styles.likeButton} onPress={() => handleUnlike()}>
+                            <Ionicons name='heart' size={22} color='tomato' />
+                        </Pressable>
+                        :
+                        <Pressable style={styles.likeButton} onPress={() => handleLike()}>
+                            <Ionicons name='heart-outline' size={22} color='#fff' />
+                        </Pressable>
+                    }
+
+
                     <Text style={styles.date}>{format(parseISO(data.start_date), "dd MMM")}</Text>
                 </View>
+
                 <View style={styles.cardBottom}>
                     <Text style={styles.title}>{data.title}</Text>
                     <Pressable style={styles.eventTypeButton}>
                         <Text style={styles.eventTypeText} >{data.event_type}</Text>
                     </Pressable>
-                    <Text style={styles.address}><Ionicons name='location' size={10} />{address.length > MAX_LENGTH ? `${address.substring(0, MAX_LENGTH)}...` : address}</Text>
+                    <Text style={styles.address}><Ionicons name='location' size={10} />{address?.length > MAX_LENGTH ? `${address.substring(0, MAX_LENGTH)}...` : address}</Text>
                 </View>
+
             </Animatable.View>
         </>
     )
@@ -90,10 +96,10 @@ const styles = StyleSheet.create({
         top: 100
     },
     cardTop: {
-        height: '65%'
+        height: 140
     },
     image: {
-        flex: 1,
+        height: 180,
         resizeMode: "cover",
         borderTopRightRadius: 12,
         borderTopLeftRadius: 12,
