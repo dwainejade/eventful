@@ -1,5 +1,4 @@
 import { createStore, action, persist } from "easy-peasy";
-// import data from '../data/MOCK_DATA.json'
 
 const store = createStore(
     persist({
@@ -20,7 +19,21 @@ const store = createStore(
         setSearchResults: action((state, payload) => {
             state.searchResults = payload
         }),
-    })
+
+        // liked events
+        likedEvents: [],
+        setLikedEvents: action((state, payload) => {
+            state.likedEvents = payload
+        }),
+        addLikedEvent: action((state, payload) => {
+            state.likedEvents.push(payload)
+        }),
+        removeLikedEvent: action((state, payload) => {
+            const newState = state.likedEvents.filter(item => item !== payload)
+            state.likedEvents = newState
+        }),
+
+    }),
 )
 
 export default store;
