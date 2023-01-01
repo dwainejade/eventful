@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native'
 import EventCard from '../../components/EventCard';
 import FeaturedEventCard from '../../components/FeaturedEventCard';
@@ -7,81 +7,125 @@ import 'react-native-url-polyfill/auto' // need this for supabase to work ðŸ¤·ðŸ
 import { supabase } from '../../supabase/supabase';
 
 const HomeScreen = ({ navigation }) => {
-    const data = useStoreState((state) => state.events);
+    const session = useStoreState((state) => state.session);
+    const events = useStoreState((state) => state.events);
     const setEvents = useStoreActions((actions) => actions.setEvents);
+    const likedEvents = useStoreState((state) => state.likedEvents);
+    const setLikedEvents = useStoreActions((actions) => actions.setLikedEvents);
+    const [address, setAddress] = useState('')
+    const userId = session.user.identities[0].id
 
     useEffect(() => {
         getEvents()
-    }, [])
+        getVenue(events.venue)
+        getLikes(userId)
+    }, [session])
 
-    async function getEvents() {
-        try {
-            const { data: Events } = await supabase
-                .from('Events')
-                .select('*')
-                .order('start_date');
-            setEvents(Events);
-        } catch (error) {
-            console.error(error);
+
+    const getEvents = useCallback(async () => {
+        let { data: Events, error } = await supabase
+            .from('Events')
+            .select('*')
+            .order('start_date');
+        setEvents(Events);
+        if (error) {
+            // console.log("getEvents error: ", error)
+            return null
         }
-    }
+    }, []);
 
-    const eventCard = ({ item, index }) => (
+    const getVenue = useCallback(async (id) => {
+        let { data: Venue, error } = await supabase
+            .from('Venue')
+            .select('address')
+            .eq('id', id)
+        if (Venue) setAddress(Venue[0].address)
+        if (error) {
+            // console.log("getVenue error: ", error)
+            return null
+        }
+    }, []);
+
+    const getLikes = useCallback(async (id) => {
+        let { data: profile, error } = await supabase
+            .from('profiles')
+            .select('liked_events')
+            .eq('id', id)
+        if (profile) setLikedEvents(profile[0].liked_events)
+        if (error) {
+            // console.log("getLikes error: ", error)
+            return null
+        }
+    }, []);
+
+
+    const eventCard = ({ item }) => (
         <TouchableOpacity
             onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
-            <EventCard data={item} index={index} />
+            <EventCard data={item} userId={userId} address={address} />
         </TouchableOpacity>
     );
+
+    const likedCards = ({ item }) => (
+        likedEvents.includes(item.id) &&
+        <TouchableOpacity
+            onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
+            <EventCard data={item} userId={userId} address={address} />
+        </TouchableOpacity>
+    )
 
     return (
         <SafeAreaView style={styles.container}>
 
             <ScrollView style={styles.mainContainer}>
-                <View style={styles.headingContainer}>
-                    <Text style={styles.heading}>Featured</Text>
-                    <TouchableOpacity><Text>View all</Text></TouchableOpacity>
-                </View>
-                {/* featured cards are wide */}
-                <FeaturedEventCard data={data} />
+                <View>
 
-                <View style={styles.headingContainer}>
-                    <Text style={styles.heading}>Upcoming</Text>
-                    <TouchableOpacity><Text>View all</Text></TouchableOpacity>
-                </View>
+                    <View style={styles.headingContainer}>
+                        <Text style={styles.heading}>Featured</Text>
+                        <TouchableOpacity><Text>View all</Text></TouchableOpacity>
+                    </View>
+                    {/* featured cards are wide */}
+                    <FeaturedEventCard data={events} />
 
-                <View style={styles.listCon}>
-                    <FlatList
-                        data={data}
-                        renderItem={eventCard}
-                        keyExtractor={item => item.id}
-                        horizontal
-                        initialNumToRender={5}
-                        removeClippedSubviews
-                        showsHorizontalScrollIndicator={false}
-                        snapToInterval={216}
-                        snapToAlignment='start'
-                    />
-                </View>
+                    <View style={styles.headingContainer}>
+                        <Text style={styles.heading}>Upcoming</Text>
+                        <TouchableOpacity><Text>View all</Text></TouchableOpacity>
+                    </View>
 
-                <View style={styles.headingContainer}>
-                    <Text style={styles.heading}>Nearby</Text>
-                    <TouchableOpacity><Text>View all</Text></TouchableOpacity>
-                </View>
-                <View >
-                    <FlatList
-                        data={data}
-                        renderItem={eventCard}
-                        keyExtractor={item => item.id}
-                        horizontal
-                        initialNumToRender={5}
-                        removeClippedSubviews
-                        showsHorizontalScrollIndicator={false}
-                        snapToInterval={216}
-                        snapToAlignment='start'
-                        decelerationRate='fast'
-                    />
-                </View>
+                    <View style={styles.listCon}>
+                        <FlatList
+                            data={events}
+                            renderItem={eventCard}
+                            keyExtractor={item => item.id}
+                            horizontal
+                            initialNumToRender={5}
+                            removeClippedSubviews
+                            showsHorizontalScrollIndicator={false}
+                            snapToInterval={216}
+                            snapToAlignment='start'
+                        />
+                    </View>
 
+                    <View style={styles.headingContainer}>
+                        <Text style={styles.heading}>Liked</Text>
+                        <TouchableOpacity><Text>View all</Text></TouchableOpacity>
+                    </View>
+                    <View >
+                        <FlatList
+                            data={events}
+                            renderItem={likedCards}
+                            keyExtractor={item => item.id}
+                            horizontal
+                            initialNumToRender={5}
+                            removeClippedSubviews
+                            showsHorizontalScrollIndicator={false}
+                            snapToInterval={216}
+                            snapToAlignment='start'
+                        />
+
+                    </View>
+
+                </View>
             </ScrollView>
         </SafeAreaView>
     )
