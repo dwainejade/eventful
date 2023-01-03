@@ -1,39 +1,57 @@
 import { createStore, action, persist } from "easy-peasy";
 
+
 const store = createStore(
     persist({
+        session: null,
         events: [],
+        likedIds: [],
+        likedEvents: [],
+        searchResults: [],
+        // auth session
+        setSession: action((state, payload) => {
+            state.session = payload
+        }),
+
         setEvents: action((state, payload) => {
             state.events = payload
         }),
         deleteEvent: action((state, id) => {
             state.events.filter((item) => item !== id)
         }),
-        // auth session
-        session: null,
-        setSession: action((state, payload) => {
-            state.session = payload
-        }),
+
         // search results
-        searchResults: [],
         setSearchResults: action((state, payload) => {
             state.searchResults = payload
         }),
 
         // liked events
-        likedEvents: [],
+        setLikedIds: action((state, payload) => {
+            state.likedIds = payload
+        }),
+        addLikedId: action((state, payload) => {
+            state.likedIds.push(payload)
+        }),
+        removeLikedId: action((state, payload) => {
+            state.likedIds = state.likedIds.filter(
+                (item) => item !== payload
+            )
+        }),
         setLikedEvents: action((state, payload) => {
             state.likedEvents = payload
-        }),
-        addLikedEvent: action((state, payload) => {
-            state.likedEvents.push(payload)
-        }),
-        removeLikedEvent: action((state, payload) => {
-            const newState = state.likedEvents.filter(item => item !== payload)
-            state.likedEvents = newState
-        }),
+        })
+    }, {
+        persistWhitelist: ['session']
+    })
+);
 
-    }),
-)
+
+// if (process.env.NODE_ENV === "development") {
+//     if (module.hot) {
+//         module.hot.accept("./model", () => {
+//             store.reconfigure(model);  // 👈 Here is the magic
+//         });
+//     }
+// }
 
 export default store;

@@ -1,33 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useStoreState, useStoreActions } from 'easy-peasy';
-import { supabase } from '../supabase/supabase';
 import { format, parseISO } from "date-fns";
 import * as Animatable from 'react-native-animatable';
 
-const EventCard = ({ data, address, userId }) => {
+const EventCard = ({ data, index, address, updateServer }) => {
     const [isLoading, setIsLoading] = useState(true)
-    const likedEvents = useStoreState((state) => state.likedEvents);
-    const addLikedEvent = useStoreActions((actions) => actions.addLikedEvent);
-    const removeLikedEvent = useStoreActions((actions) => actions.removeLikedEvent);
+    const likedIds = useStoreState((state) => state.likedIds);
+    const addLikedId = useStoreActions((actions) => actions.addLikedId);
+    const removeLikedId = useStoreActions((actions) => actions.removeLikedId);
     const MAX_LENGTH = 30;
 
-    const updateServer = async () => {
-        const { data, error } = await supabase
-            .from('profiles')
-            .update({ liked_events: likedEvents })
-            .eq('id', userId)
-    }
+    useEffect(() => {
+        updateServer(likedIds);
+    }, [likedIds]);
 
     const handleLike = () => {
-        addLikedEvent(data.id)
-        updateServer()
+        addLikedId(data.id)
     }
-
     const handleUnlike = () => {
-        removeLikedEvent(data.id)
-        updateServer()
+        removeLikedId(data.id)
     }
 
     return (
@@ -37,7 +30,7 @@ const EventCard = ({ data, address, userId }) => {
                     <ActivityIndicator size='small' color="#333" />
                 </View>
             }
-            <Animatable.View style={styles.container} animation='zoomIn' easing="ease-out-circ" onAnimationBegin={() => setIsLoading(false)}>
+            <Animatable.View style={styles.container} animation='fadeInRight' delay={50 * index} easing="ease-out-circ" onAnimationBegin={() => setIsLoading(false)}>
                 <View style={styles.cardTop}>
                     <View style={{ overflow: 'hidden' }}>
 
@@ -47,7 +40,7 @@ const EventCard = ({ data, address, userId }) => {
                         />
                     </View>
 
-                    {likedEvents.includes(data.id) ?
+                    {likedIds?.includes(data.id) ?
                         <Pressable style={styles.likeButton} onPress={() => handleUnlike()}>
                             <Ionicons name='heart' size={22} color='tomato' />
                         </Pressable>
@@ -56,7 +49,6 @@ const EventCard = ({ data, address, userId }) => {
                             <Ionicons name='heart-outline' size={22} color='#fff' />
                         </Pressable>
                     }
-
 
                     <Text style={styles.date}>{format(parseISO(data.start_date), "dd MMM")}</Text>
                 </View>
