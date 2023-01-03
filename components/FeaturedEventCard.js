@@ -1,23 +1,28 @@
-import he from 'date-fns/esm/locale/he/index.js';
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react'
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import * as Animatable from 'react-native-animatable';
 
 const FeaturedEventCard = ({ data }) => {
     const [isLoading, setIsLoading] = useState(true)
+    const { navigate } = useNavigation()
+
     return (
         <>
-            <TouchableOpacity style={styles.container}>
+            <TouchableOpacity style={styles.container} onPress={() => navigate('EventDetails', { itemId: data.id })}>
+
                 {isLoading &&
                     <View style={styles.spinnerContainer}>
                         <ActivityIndicator size='small' color="#333" />
                     </View>
                 }
-                <Animatable.Image animation='zoomInRight' duration={1200} easing="ease-out-circ" onAnimationBegin={() => setIsLoading(false)}
+
+                <Animatable.Image
+                    animation='zoomIn' duration={2000} easing="ease-out-circ" onAnimationBegin={() => setIsLoading(false)}
                     style={styles.image}
-                    source={{ uri: 'https://source.unsplash.com/random/500×300/?event' }}
+                    source={{ uri: data.poster }}
                 />
-                <Text style={styles.caption}>International Concert</Text>
+                <Text style={styles.caption}>{data.title}</Text>
             </TouchableOpacity>
         </>
     )
