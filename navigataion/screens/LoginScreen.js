@@ -33,6 +33,8 @@ export default function Auth() {
                 <ActivityIndicator style={styles.spinner} size='large' />
             }
 
+            <Text style={styles.header}>Login</Text>
+
             <View style={[styles.verticallySpaced]}>
                 <TextInput style={styles.input}
                     label="Email"
@@ -60,8 +62,8 @@ export default function Auth() {
             </View>
 
             <View style={styles.flexRow}>
-                <Checkbox style={styles.checkbox}
-                    disabled={false}
+                <Checkbox
+                    style={styles.checkbox}
                     value={toggleCheckBox}
                     onValueChange={(newValue) => setToggleCheckBox(newValue)}
                 />
@@ -98,6 +100,12 @@ const styles = StyleSheet.create({
         marginTop: 20,
         alignSelf: 'center'
     },
+    header: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginLeft: 8,
+        marginBottom: 8
+    },
     verticallySpaced: {
         paddingTop: 4,
         paddingBottom: 4,
@@ -122,8 +130,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 18
     },
     checkbox: {
-        height: 16,
-        width: 16,
+        height: 20,
+        width: 20,
         margin: 5,
     },
     label: {
