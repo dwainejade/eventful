@@ -3,42 +3,41 @@ import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from 'rea
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { supabase } from '../supabase/supabase';
 import { format, parseISO } from "date-fns";
+import { useStoreState, useStoreActions } from 'easy-peasy';
 import * as Animatable from 'react-native-animatable';
 
-const EventCard = ({ data, index }) => {
-    const [buttonState, setButtonState] = useState(data.isLiked);
+const EventCard = ({ data, index, address, updateServer }) => {
     const [isLoading, setIsLoading] = useState(true)
-    const [address, setAddress] = useState('')
+    const likedIds = useStoreState((state) => state.likedIds);
+    const addLikedId = useStoreActions((actions) => actions.addLikedId);
+    const removeLikedId = useStoreActions((actions) => actions.removeLikedId);
     const MAX_LENGTH = 30;
 
-    let buttonColor
-    let buttonType
-    if (buttonState) {
-        buttonColor = '#fff';
-        buttonType = 'heart'
-    } else {
-        buttonColor = '#fff';
-        buttonType = 'heart-outline'
+    const handleLike = () => {
+        addLikedId(data.id)
+    }
+    const handleUnlike = () => {
+        removeLikedId(data.id)
     }
 
-    useEffect(() => {
-        getVenue(data.venue)
-    }, [])
+    // useEffect(() => {
+    //     getVenue(data.venue)
+    // }, [])
 
 
-    const getVenue = useCallback(async (id) => {
-        let { data: Venue, error } = await supabase
-            .from('Venue')
-            .select('address')
-            .eq('id', id)
-        if (Venue) setAddress(Venue[0].address)
+    // const getVenue = useCallback(async (id) => {
+    //     let { data: Venue, error } = await supabase
+    //         .from('Venue')
+    //         .select('address')
+    //         .eq('id', id)
+    //     if (Venue) setAddress(Venue[0].address)
 
-        if (error) {
-            return null
-            // console.log('error getting address', error)
-        }
+    //     if (error) {
+    //         return null
+    //         // console.log('error getting address', error)
+    //     }
 
-    }, []);
+    // }, []);
 
     return (
         <>
@@ -47,15 +46,27 @@ const EventCard = ({ data, index }) => {
                     <ActivityIndicator size='small' color="#333" />
                 </View>
             }
-            <Animatable.View style={styles.cardContainer} animation='zoomIn' easing="ease-out-circ" onAnimationBegin={() => setIsLoading(false)}>
+            <Animatable.View
+                style={styles.cardContainer}
+                animation='fadeInRight' easing="ease-out-circ"
+                onAnimationBegin={() => setIsLoading(false)}>
+
                 <View style={styles.cardLeft}>
                     <Image
                         style={styles.image}
                         source={{ uri: data.poster }}
                     />
-                    <Pressable style={styles.likeButton} onPress={() => setButtonState(!buttonState)}>
-                        <Ionicons name={buttonType} size={22} color={buttonColor} />
-                    </Pressable>
+
+                    {likedIds?.includes(data.id) ?
+                        <Pressable style={styles.likeButton} onPress={() => handleUnlike()}>
+                            <Ionicons name='heart' size={22} color='tomato' />
+                        </Pressable>
+                        :
+                        <Pressable style={styles.likeButton} onPress={() => handleLike()}>
+                            <Ionicons name='heart-outline' size={22} color='#fff' />
+                        </Pressable>
+                    }
+
                     <Text style={styles.date}>{format(parseISO(data.start_date), "dd MMM")}</Text>
                 </View>
                 <View style={styles.cardRight}>
@@ -119,7 +130,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         textAlign: 'center',
         justifyContent: 'center',
-        backgroundColor: '#f1f1f1',
+        backgroundColor: '#fff',
         overflow: 'hidden',
         padding: 1
     },
@@ -129,7 +140,7 @@ const styles = StyleSheet.create({
         padding: 12,
         borderRadius: 12,
         flexDirection: 'column',
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-evenly',
     },
     title: {
         fontSize: 16,
