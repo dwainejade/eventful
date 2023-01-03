@@ -1,20 +1,41 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useStoreState, useStoreActions } from 'easy-peasy';
 import { format, parseISO } from "date-fns";
 import * as Animatable from 'react-native-animatable';
+import { supabase } from '../supabase/supabase';
 
-const EventCard = ({ data, index, address, updateServer }) => {
+const EventCard = ({ data, index, updateServer }) => {
     const [isLoading, setIsLoading] = useState(true)
     const likedIds = useStoreState((state) => state.likedIds);
     const addLikedId = useStoreActions((actions) => actions.addLikedId);
     const removeLikedId = useStoreActions((actions) => actions.removeLikedId);
+    const [venue, setVenue] = useState('')
     const MAX_LENGTH = 30;
 
     useEffect(() => {
         updateServer(likedIds);
+        getVenue(data.venue)
     }, [likedIds]);
+
+    // get venues to add display address and/or titles on cards
+    const getVenue = useCallback(async (id) => {
+        if (!id) return
+        let { data: Venue, error } = await supabase
+            .from('Venue')
+            .select('*')
+            .eq('id', id)
+        if (Venue) {
+            setVenue(Venue[0])
+        }
+        if (error) {
+            // console.log("getVenue error: ", error)
+            return null
+        }
+    }, [data]);
+
+    // console.log('EventCard:', event.address)
 
     const handleLike = () => {
         addLikedId(data.id)
@@ -58,7 +79,7 @@ const EventCard = ({ data, index, address, updateServer }) => {
                     <Pressable style={styles.eventTypeButton}>
                         <Text style={styles.eventTypeText} >{data.event_type}</Text>
                     </Pressable>
-                    <Text style={styles.address}><Ionicons name='location' size={10} />{address?.length > MAX_LENGTH ? `${address.substring(0, MAX_LENGTH)}...` : address}</Text>
+                    <Text style={styles.address}><Ionicons name='location' size={10} />{venue?.address?.length > MAX_LENGTH ? `${venue.address.substring(0, MAX_LENGTH)}...` : venue.address}</Text>
                 </View>
 
             </Animatable.View>

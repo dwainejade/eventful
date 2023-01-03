@@ -15,33 +15,36 @@ const HomeScreen = ({ navigation }) => {
     const setLikedIds = useStoreActions((actions) => actions.setLikedIds);
     const likedEvents = useStoreState((state) => state.likedEvents);
     const setLikedEvents = useStoreActions((actions) => actions.setLikedEvents);
-    const [address, setAddress] = useState('')
+    const featuredId = useStoreState((state) => state.featuredId);
+    const [featuredEvent, setFeaturedEvent] = useState({})
+    // const setFeaturedEvent = useStoreActions((actions) => actions.setFeaturedEvent);
     const userId = session.user.identities[0].id
-    const [range, setRange] = useState(20)
+    const [range, setRange] = useState(15)
 
     useEffect(() => {
         getEvents()
-        getVenue(events.venue)
         getLikes(userId);
     }, [])
 
     useEffect(() => {
         searchEvents(likedIds)
+        getFeaturedEvent()
     }, [likedIds])
 
-
+    // save likedIds to server
     const updateServer = async () => {
-        const { data, error } = await supabase
+        let { data, error } = await supabase
             .from('profiles')
             .update({ liked_events: likedIds })
             .eq('id', userId)
     }
 
+    //  get all events
     const getEvents = useCallback(async () => {
         let { data: Events, error } = await supabase
             .from('Events')
             .select('*')
-            .range(0, range)
+            // .range(0, range) // TODO add pagination
             .order('start_date');
         setEvents(Events);
         if (error) {
@@ -50,20 +53,24 @@ const HomeScreen = ({ navigation }) => {
         }
     }, []);
 
-    const getVenue = useCallback(async (id) => {
-        let { data: Venue, error } = await supabase
-            .from('Venue')
-            .select('address')
-            .eq('id', id)
-        if (Venue) {
-            setAddress(Venue[0].address)
+    const getFeaturedEvent = async () => {
+        let fId
+        let { data: Featured_Events } = await supabase
+            .from('Featured_Events')
+            .select()
+        if (Featured_Events) {
+            fId = Featured_Events[0].event_id
         }
-        if (error) {
-            // console.log("getVenue error: ", error)
-            return null
+        let { data: Events } = await supabase
+            .from('Events')
+            .select()
+            .eq('id', fId)
+        if (Events) {
+            setFeaturedEvent(Events[0])
         }
-    }, []);
+    }
 
+    // get array of liked ids from profiles table
     const getLikes = async (id) => {
         let { data: Profile, error } = await supabase
             .from('profiles')
@@ -73,18 +80,19 @@ const HomeScreen = ({ navigation }) => {
             setLikedIds(Profile[0].liked_events)
         }
         if (error) {
-            console.log("getLikes error: ", error)
+            // console.log("getLikes error: ", error)
             return null
         }
     };
+
+    // search events and match with likedIds
     const searchEvents = async (ids) => {
-        const { data, error } = await supabase
+        let { data, error } = await supabase
             .from('Events')
             .select()
             .in('id', ids)
             .order('id')
         if (data) setLikedEvents(data)
-
 
         if (error) {
             console.error(error);
@@ -96,14 +104,14 @@ const HomeScreen = ({ navigation }) => {
     const eventCard = ({ item, index }) => (
         <TouchableOpacity
             onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
-            <EventCard data={item} userId={userId} index={index} address={address} updateServer={updateServer} searchEvents={searchEvents} />
+            <EventCard data={item} userId={userId} index={index} updateServer={updateServer} searchEvents={searchEvents} />
         </TouchableOpacity>
     );
 
     const likedCards = ({ item }) => (
         <TouchableOpacity
             onPress={() => navigation.navigate('EventDetails', { itemId: item.id })}>
-            <EventCard data={item} userId={userId} address={address} updateServer={updateServer} searchEvents={searchEvents} />
+            <EventCard data={item} userId={userId} updateServer={updateServer} searchEvents={searchEvents} />
         </TouchableOpacity>
     )
 
@@ -120,7 +128,7 @@ const HomeScreen = ({ navigation }) => {
                     </Animatable.View>
 
                     {/* featured cards are wide */}
-                    <FeaturedEventCard data={events} />
+                    <FeaturedEventCard data={featuredEvent} />
 
 
                     <Animatable.View animation='fadeInRight' duration={500} delay={500} easing="ease-out-circ"

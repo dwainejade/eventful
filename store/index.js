@@ -8,6 +8,7 @@ const store = createStore(
         likedIds: [],
         likedEvents: [],
         searchResults: [],
+        featuredId: [4733493, 6870586],
         // auth session
         setSession: action((state, payload) => {
             state.session = payload
@@ -39,6 +40,9 @@ const store = createStore(
         }),
         setLikedEvents: action((state, payload) => {
             state.likedEvents = payload
+        }),
+        setFeaturedId: action((state, payload) => {
+            state.featuredId = payload
         })
     }, {
         persistWhitelist: ['session']
