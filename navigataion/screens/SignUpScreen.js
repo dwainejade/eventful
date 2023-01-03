@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { SafeAreaView, Alert, StyleSheet, View, Text, TextInput } from 'react-native'
+import { SafeAreaView, Alert, StyleSheet, View, Text, TextInput, Image } from 'react-native'
+import logo from '../../assets/splash.png'
 import Checkbox from 'expo-checkbox';
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { supabase } from '../../supabase/supabase'
@@ -33,6 +34,7 @@ export default function SignUpScreen() {
 
     return (
         <SafeAreaView style={styles.container}>
+            <Image source={logo} resizeMethod='contain' style={styles.logo} />
             {/* <View style={[styles.verticallySpaced, styles.mt20]}>
                 <TextInput style={styles.input}
                     label="Name"
@@ -43,7 +45,8 @@ export default function SignUpScreen() {
                     autoCapitalize={'none'}
                 />
             </View> */}
-            <Text style={styles.header}>SignUp</Text>
+            <Text style={styles.header}>Sign Up</Text>
+
             <View style={styles.verticallySpaced}>
                 <TextInput style={styles.input}
                     label="Email"
@@ -86,7 +89,7 @@ export default function SignUpScreen() {
                 <Text style={styles.label}>Show password</Text>
             </View>
 
-            <View style={styles.verticallySpaced}>
+            <View style={[styles.verticallySpaced, styles.mt20]}>
                 <TouchableOpacity style={styles.button} disabled={loading} onPress={() => signUpWithEmail()} >
                     <Text style={styles.buttonText}>Register</Text>
                 </TouchableOpacity>
@@ -108,6 +111,18 @@ const styles = StyleSheet.create({
         flex: 1,
         width: 250,
         alignSelf: 'center'
+    },
+    logo: {
+        width: 250,
+        height: 150,
+        marginTop: 20,
+        alignSelf: 'center'
+    },
+    header: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginLeft: 8,
+        marginBottom: 8
     },
     verticallySpaced: {
         paddingTop: 4,
@@ -133,8 +148,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 18
     },
     checkbox: {
-        height: 16,
-        width: 16,
+        height: 20,
+        width: 20,
         margin: 5,
     },
     label: {

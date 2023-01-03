@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, TouchableHighlight, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView, TouchableOpacity, TouchableHighlight, ActivityIndicator } from 'react-native'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 import { supabase } from '../../supabase/supabase';
 import { Entypo, Ionicons } from '@expo/vector-icons';
@@ -45,7 +45,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
 
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <BackButton />
 
             {!event ?
@@ -144,7 +144,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
                 <Text style={styles.price}>${event?.price} /<Ionicons name='person' size={18} /> </Text>
 
             </Animatable.View>
-        </View >
+        </SafeAreaView >
     )
 }
 
