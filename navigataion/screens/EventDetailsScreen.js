@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView, TouchableOpacity, TouchableHighlight, ActivityIndicator } from 'react-native'
-import { useStoreState, useStoreActions } from 'easy-peasy'
 import { supabase } from '../../supabase/supabase';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import Divider from '../../components/Divider'
@@ -11,8 +10,6 @@ import { format, parseISO } from "date-fns";
 import * as Animatable from 'react-native-animatable';
 
 const EventDetailsScreen = ({ navigation, route }) => {
-    const data = useStoreState((state) => state.events);
-    const getEvent = useStoreActions(actions => actions.getEvent)
     const [isPosterLoading, setIsPosterLoading] = useState(true);
     const [event, setEvent] = useState(null)
     const [venue, setVenue] = useState(null)
@@ -20,28 +17,42 @@ const EventDetailsScreen = ({ navigation, route }) => {
     const { navigate } = useNavigation()
     const scrollRef = useRef()
 
+    useEffect(() => {
+        getEvent(itemId)
+        console.log({ itemId })
+    }, [itemId])
 
     useEffect(() => {
-        let event = data.filter((item) => item.id === itemId)
-        setEvent(() => event[0])
-        // console.log(event)
         if (event) {
-            getVenue(event[0].venue)
+            getVenue(event.venue)
         }
-    }, [itemId, getVenue])
+    }, [isPosterLoading])
 
+    const getEvent = useCallback(async (id) => {
+        let { data: Events, error } = await supabase
+            .from('Events')
+            .select('*')
+            .eq('id', id)
+        setEvent(Events[0]);
+        if (error) {
+            console.log("getEvents error: ", error)
+            return null
+        }
+    }, []);
 
     const getVenue = useCallback(async (id) => {
         let { data: Venue, error } = await supabase
             .from('Venue')
             .select('*')
             .eq('id', id)
-        if (Venue) setVenue(Venue[0])
-        // console.log(venue)
+        if (Venue) {
+            setVenue(Venue[0])
+            console.log(Venue[0])
+        }
         if (error) {
             return null
         }
-    }, []);
+    }, [itemId]);
 
 
     return (
