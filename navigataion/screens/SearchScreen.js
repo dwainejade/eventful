@@ -46,7 +46,8 @@ export default SearchScreen
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#f4f4f4',
+        marginHorizontal: 6
     },
     mainContainer: {
     },
@@ -55,6 +56,6 @@ const styles = StyleSheet.create({
         resizeMode: "cover",
         minHeight: 360,
         width: '100%',
-        marginTop: '20%'
+        marginTop: '20%',
     }
 })
