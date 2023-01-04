@@ -19,7 +19,6 @@ const EventDetailsScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         getEvent(itemId)
-        console.log({ itemId })
     }, [itemId])
 
     useEffect(() => {
@@ -47,7 +46,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
             .eq('id', id)
         if (Venue) {
             setVenue(Venue[0])
-            console.log(Venue[0])
+            // console.log(Venue[0])
         }
         if (error) {
             return null
