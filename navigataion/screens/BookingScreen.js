@@ -5,7 +5,7 @@ import BackButton from '../../components/BackButton'
 import { supabase } from '../../supabase/supabase';
 // import Divider from '../../components/Divider'
 import * as Animatable from 'react-native-animatable';
-// import { Entypo, Ionicons } from '@expo/vector-icons';
+import { Entypo, Ionicons } from '@expo/vector-icons';
 
 const BookingScreen = ({ navigation, route }) => {
     const { itemId } = route.params
@@ -20,6 +20,10 @@ const BookingScreen = ({ navigation, route }) => {
     useEffect(() => {
         setTotal(calculateTotal());
     }, [ticketState]);
+
+    // TODO
+    // add states to store
+    // add max quantity based on tickets left to purchase
 
 
     const getPrices = async (id) => {
@@ -74,17 +78,17 @@ const BookingScreen = ({ navigation, route }) => {
 
             {ticketState?.map((ticket, i) => (
                 <View style={styles.choiceCon} key={i}>
-                    <Text style={{ fontSize: 16 }}>{ticket.type}</Text>
+                    <Text style={{ fontSize: 20 }}>{ticket.type}</Text>
 
                     <View style={styles.controlsCon}>
-                        <Pressable onPress={() => adjustQuantity(ticket.type, -1)}>
-                            <Text style={{ fontSize: 16 }}>-</Text>
+                        <Pressable onPress={() => { if (ticket.quantity > 0) adjustQuantity(ticket.type, -1) }}>
+                            <Entypo name="minus" size={20} color="black" />
                         </Pressable>
 
-                        <Text style={{ fontSize: 16 }}>{ticket.quantity}</Text>
+                        <Text style={{ fontSize: 20 }}>{ticket.quantity}</Text>
 
-                        <Pressable onPress={() => adjustQuantity(ticket.type, 1)}>
-                            <Text style={{ fontSize: 16 }}>+</Text>
+                        <Pressable onPress={() => { if (ticket.quantity < 100) adjustQuantity(ticket.type, 1) }}>
+                            <Entypo name="plus" size={20} color="black" />
                         </Pressable>
                     </View>
                 </View>
@@ -113,10 +117,10 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         marginLeft: 55,
-        marginTop: 8
+        marginTop: 15
     },
     subHeader: {
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: 'bold',
         marginTop: 30,
         color: '#2F3437'
@@ -150,6 +154,7 @@ const styles = StyleSheet.create({
     controlsCon: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
+        alignItems: 'center',
         width: 90
     },
     bottomTab: {
