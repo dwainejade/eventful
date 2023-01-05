@@ -1,63 +1,98 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Pressable, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import BackButton from '../../components/BackButton'
+import { supabase } from '../../supabase/supabase';
 // import Divider from '../../components/Divider'
 import * as Animatable from 'react-native-animatable';
-import { Entypo, Ionicons } from '@expo/vector-icons';
+// import { Entypo, Ionicons } from '@expo/vector-icons';
 
-const BookingScreen = () => {
-    const [amount, setAmount] = useState(0)
+const BookingScreen = ({ navigation, route }) => {
+    const { itemId } = route.params
+    const [total, setTotal] = useState(0)
+    const [ticketState, setTicketState] = useState([])
+
+    useEffect(() => {
+        getPrices(itemId)
+
+    }, [itemId])
+
+    useEffect(() => {
+        setTotal(calculateTotal());
+    }, [ticketState]);
+
+
+    const getPrices = async (id) => {
+        let { data: Prices, error } = await supabase
+            .from('Events')
+            .select('ticket_tiers')
+            .eq('id', id)
+
+        if (Prices) {
+            let prices = Prices[0].ticket_tiers
+            setTicketState(prices.map((price) => ({
+                type: price.tierName,
+                quantity: 0,
+                price: price.ticketPrice
+            })))
+        }
+        if (error) {
+            console.log("getEvents error: ", error)
+            return null
+        }
+    };
+
+    const calculateTotal = () => {
+        let total = 0;
+        ticketState.forEach(ticket => {
+            total += ticket.price * ticket.quantity;
+        });
+        return total;
+    };
+
+    const adjustQuantity = (selectedTicketType, quantity) => {
+        setTicketState(
+            ticketState.map(ticket => {
+                if (ticket.type === selectedTicketType) {
+                    return {
+                        ...ticket,
+                        quantity: ticket.quantity + quantity
+                    };
+                }
+                return ticket;
+            })
+        );
+    };
 
 
     return (
         <SafeAreaView style={styles.container}>
             <BackButton />
+
             <Text style={styles.header}>Buy Ticket</Text>
+            <Text style={styles.subHeader}>Tiers</Text>
 
-            {/* <Text style={styles.subHeader}>Ticket Type</Text> */}
-            {/* <View style={styles.ticketTypeBtnCon}>
-                <TouchableOpacity style={[styles.btn, { backgroundColor: vip ? 'black' : 'white' }]} onPress={() => setVip(true)} >
-                    <Text style={{ color: vip ? 'white' : 'black', fontWeight: 'bold' }} >VIP</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.btn, { backgroundColor: vip ? 'white' : 'black' }]} onPress={() => setVip(false)}>
-                    <Text style={{ color: vip ? 'black' : 'white', fontWeight: 'bold' }} >Economy</Text>
-                </TouchableOpacity>
-            </View> */}
+            {ticketState?.map((ticket, i) => (
+                <View style={styles.choiceCon} key={i}>
+                    <Text style={{ fontSize: 16 }}>{ticket.type}</Text>
 
-            <Text style={styles.subHeader}>Seats</Text>
+                    <View style={styles.controlsCon}>
+                        <Pressable onPress={() => adjustQuantity(ticket.type, -1)}>
+                            <Text style={{ fontSize: 16 }}>-</Text>
+                        </Pressable>
 
-            <View style={styles.choiceCon}>
-                <Text style={styles.type}>VIP</Text>
-                <View style={styles.controlsCon}>
-                    <Pressable onPress={() => setAmount(amount - 1)}>
-                        <Text style={{ fontSize: 16 }}>-</Text>
-                    </Pressable>
+                        <Text style={{ fontSize: 16 }}>{ticket.quantity}</Text>
 
-                    <Text style={{ fontSize: 16 }} type='number' value={amount}>{amount}</Text>
-
-                    <Pressable onPress={() => setAmount(amount + 1)}>
-                        <Text style={{ fontSize: 16 }}>+</Text>
-                    </Pressable>
+                        <Pressable onPress={() => adjustQuantity(ticket.type, 1)}>
+                            <Text style={{ fontSize: 16 }}>+</Text>
+                        </Pressable>
+                    </View>
                 </View>
-            </View>
+            ))}
 
-            <View style={styles.choiceCon}>
-                <Text style={styles.type}>General Admission</Text>
-                <View style={styles.controlsCon}>
-                    <Pressable>
-                        <Text style={{ fontSize: 16 }} >-</Text>
-                    </Pressable>
-                    <Text style={{ fontSize: 16 }}>0</Text>
-                    <Pressable>
-                        <Text style={{ fontSize: 16 }}>+</Text>
-                    </Pressable>
-                </View>
-            </View>
-            <Animatable.View style={styles.bottomTab} animation='slideInUp' delay={400} easing='ease-out-expo' >
-
-                <Text style={styles.price}>$180</Text>
-                <TouchableOpacity style={styles.bookBtn} onPress={() => navigation.navigate('Booking')}>
+            <Animatable.View style={styles.bottomTab} animation='slideInRight' easing='ease-out-expo' >
+                <Text style={styles.price}>${total}</Text>
+                <TouchableOpacity style={styles.bookBtn} onPress={() => null}>
                     <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18 }} >Checkout</Text>
                 </TouchableOpacity>
 
@@ -117,17 +152,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         width: 90
     },
-    type: {
-        fontSize: 16,
-        fontWeight: 'bold'
-    },
     bottomTab: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         left: '-2.5%',
-        width: '105%',
+        width: '110%',
         position: 'absolute',
         bottom: 0,
         backgroundColor: '#fff',
@@ -141,31 +172,20 @@ const styles = StyleSheet.create({
         paddingTop: 8,
         paddingBottom: 30
     },
-    shareBtnCon: {
-        width: '25%'
-    },
-    shareBtn: {
-        backgroundColor: '#E9EBED',
-        padding: 4,
-        borderRadius: 20,
-        width: 40,
-        height: 40,
-        marginLeft: 20
-    },
     bookBtn: {
-        width: '45%',
+        width: '50%',
         height: 45,
         justifyContent: 'center',
-        alignSelf: 'center',
+        alignItems: 'center',
         backgroundColor: '#000',
         borderRadius: 25,
     },
     price: {
         fontSize: 18,
         fontWeight: 'bold',
-        width: '25%',
+        width: '30%',
         height: 40,
         paddingVertical: 8,
-        textAlign: 'center',
+        textAlign: 'center'
     }
 })
