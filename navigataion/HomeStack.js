@@ -5,6 +5,7 @@ import BookingScreen from './screens/BookingScreen';
 import PosterScreen from './screens/PosterScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import TicketScreen from './screens/TicketScreen';
 
 const Stack = createStackNavigator();
 
@@ -28,8 +29,9 @@ export default function HomeStack({ navigation, route }) {
         >
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="EventDetails" component={EventDetailsScreen} />
-            <Stack.Screen name="Booking" component={BookingScreen} />
             <Stack.Screen name="Poster" component={PosterScreen} />
+            <Stack.Screen name="Booking" component={BookingScreen} />
+            <Stack.Screen name="Ticket" component={TicketScreen} />
         </Stack.Navigator>
     );
 }
