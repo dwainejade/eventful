@@ -18,14 +18,10 @@ const EventDetailsScreen = ({ navigation, route }) => {
     const scrollRef = useRef()
 
     useEffect(() => {
-        getEvent(itemId)
-    }, [itemId])
-
-    useEffect(() => {
         if (event) {
             getVenue(event.venue)
-        }
-    }, [isPosterLoading])
+        } else getEvent(itemId)
+    }, [itemId, event])
 
     const getEvent = useCallback(async (id) => {
         let { data: Events, error } = await supabase
@@ -147,11 +143,11 @@ const EventDetailsScreen = ({ navigation, route }) => {
                 </View>
 
 
-                <TouchableOpacity style={styles.bookBtn} onPress={() => navigation.navigate('Booking')}>
+                <TouchableOpacity style={styles.bookBtn} onPress={() => navigation.navigate('Booking', { itemId: itemId })}>
                     <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18 }} >Book Ticket</Text>
                 </TouchableOpacity>
 
-                <Text style={styles.price}>${event?.price} /<Ionicons name='person' size={18} /> </Text>
+                <Text style={styles.price}>${event?.ticket_tiers[1].ticketPrice} /<Ionicons name='person' size={18} /> </Text>
 
             </Animatable.View>
         </SafeAreaView >
