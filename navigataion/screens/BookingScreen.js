@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, Pressable, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Pressable, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import BackButton from '../../components/BackButton'
 import { supabase } from '../../supabase/supabase';
-// import Divider from '../../components/Divider'
 import * as Animatable from 'react-native-animatable';
-import { Entypo, Ionicons } from '@expo/vector-icons';
+import { useStoreActions, useStoreState } from 'easy-peasy';
+import { Entypo } from '@expo/vector-icons';
+import Divider from '../../components/Divider';
 
 const BookingScreen = ({ navigation, route }) => {
     const { itemId } = route.params
     const [total, setTotal] = useState(0)
     const [ticketState, setTicketState] = useState([])
+    const setTicketFooter = useStoreActions((actions) => actions.setTicketFooter);
 
     useEffect(() => {
         getPrices(itemId)
-
     }, [itemId])
 
     useEffect(() => {
         setTotal(calculateTotal());
+        setTicketFooter(ticketState)
     }, [ticketState]);
 
     // TODO
@@ -37,7 +39,8 @@ const BookingScreen = ({ navigation, route }) => {
             setTicketState(prices.map((price) => ({
                 type: price.tierName,
                 quantity: 0,
-                price: price.ticketPrice
+                price: price.ticketPrice,
+                details: price.ticketDetails
             })))
         }
         if (error) {
@@ -76,27 +79,39 @@ const BookingScreen = ({ navigation, route }) => {
             <Text style={styles.header}>Buy Ticket</Text>
             <Text style={styles.subHeader}>Tiers</Text>
 
-            {ticketState?.map((ticket, i) => (
-                <View style={styles.choiceCon} key={i}>
-                    <Text style={{ fontSize: 20 }}>{ticket.type}</Text>
+            <ScrollView>
+                {ticketState?.map((ticket, i) => (
+                    <View style={styles.choiceCon} key={i}>
 
-                    <View style={styles.controlsCon}>
-                        <Pressable onPress={() => { if (ticket.quantity > 0) adjustQuantity(ticket.type, -1) }}>
-                            <Entypo name="minus" size={20} color="black" />
-                        </Pressable>
+                        <View style={styles.choiceTop}>
+                            <Text style={{ fontSize: 17, width: '70%' }}>{ticket.type}</Text>
 
-                        <Text style={{ fontSize: 20 }}>{ticket.quantity}</Text>
+                            <View style={styles.controlsCon}>
+                                <Pressable onPress={() => { if (ticket.quantity > 0) adjustQuantity(ticket.type, -1) }}>
+                                    <Entypo name="minus" size={20} color="black" />
+                                </Pressable>
 
-                        <Pressable onPress={() => { if (ticket.quantity < 100) adjustQuantity(ticket.type, 1) }}>
-                            <Entypo name="plus" size={20} color="black" />
-                        </Pressable>
+                                <Text style={{ fontSize: 20 }}>{ticket.quantity}</Text>
+
+                                <Pressable onPress={() => { if (ticket.quantity < 100) adjustQuantity(ticket.type, 1) }}>
+                                    <Entypo name="plus" size={20} color="black" />
+                                </Pressable>
+                            </View>
+                        </View>
+
+                        <Divider />
+
+                        <View style={styles.choiceBottom}>
+                            <Text style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 4 }} >${ticket.price}</Text>
+                            <Text>{ticket.details}</Text>
+                        </View>
+
                     </View>
-                </View>
-            ))}
-
+                ))}
+            </ScrollView>
             <Animatable.View style={styles.bottomTab} animation='slideInRight' easing='ease-out-expo' >
                 <Text style={styles.price}>${total}</Text>
-                <TouchableOpacity style={styles.bookBtn} onPress={() => null}>
+                <TouchableOpacity style={styles.bookBtn} onPress={() => navigation.navigate('Ticket', { ticketInfo: ticketState })}>
                     <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18 }} >Checkout</Text>
                 </TouchableOpacity>
 
@@ -140,9 +155,7 @@ const styles = StyleSheet.create({
         borderWidth: 1
     },
     choiceCon: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        flexDirection: 'column',
         backgroundColor: '#fff',
         borderRadius: 12,
         shadowRadius: 1,
@@ -150,6 +163,18 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         paddingVertical: 20,
         paddingHorizontal: 10,
+        shadowColor: '#171717',
+        shadowOffset: { width: -1, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+    },
+    choiceTop: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    choiceBottom: {
+        justifyContent: 'space-evenly'
     },
     controlsCon: {
         flexDirection: 'row',

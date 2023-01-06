@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import Map from '../../components/Map';
 import { format, parseISO } from "date-fns";
 import * as Animatable from 'react-native-animatable';
+import { useStoreActions } from 'easy-peasy';
 
 const EventDetailsScreen = ({ navigation, route }) => {
     const [isPosterLoading, setIsPosterLoading] = useState(true);
@@ -16,6 +17,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
     const { itemId } = route.params;
     const { navigate } = useNavigation()
     const scrollRef = useRef()
+    const setTicketHeader = useStoreActions((actions) => actions.setTicketHeader);
 
     useEffect(() => {
         if (event) {
@@ -48,6 +50,17 @@ const EventDetailsScreen = ({ navigation, route }) => {
             return null
         }
     }, [itemId]);
+
+    const handleBookBtn = () => {
+        navigation.navigate('Booking', { itemId: itemId })
+
+        setTicketHeader({
+            ticketHolder: 'Jason Bourne',
+            eventTitle: event.title,
+            eventId: event.id,
+            startDate: event.start_date,
+        });
+    }
 
 
     return (
@@ -88,7 +101,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
                                 <Entypo name="calendar" size={24} color="black" />
                                 <View style={styles.textCon}>
                                     <Text style={{ fontWeight: 'bold' }}>{format(parseISO(event.start_date), "MMMM - dd - Y")}</Text>
-                                    <Text>Saturday, 4:00 PM - 10:00 PM</Text>
+                                    <Text>Saturday {event.start_time}</Text>
                                 </View>
                             </View>
 
@@ -143,7 +156,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
                 </View>
 
 
-                <TouchableOpacity style={styles.bookBtn} onPress={() => navigation.navigate('Booking', { itemId: itemId })}>
+                <TouchableOpacity style={styles.bookBtn} onPress={() => handleBookBtn()}>
                     <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18 }} >Book Ticket</Text>
                 </TouchableOpacity>
 
