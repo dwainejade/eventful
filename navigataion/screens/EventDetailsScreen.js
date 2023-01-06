@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView, TouchableOpacity, TouchableHighlight, ActivityIndicator } from 'react-native'
-import { useStoreState, useStoreActions } from 'easy-peasy'
 import { supabase } from '../../supabase/supabase';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import Divider from '../../components/Divider'
@@ -9,39 +8,59 @@ import { useNavigation } from '@react-navigation/native';
 import Map from '../../components/Map';
 import { format, parseISO } from "date-fns";
 import * as Animatable from 'react-native-animatable';
+import { useStoreActions } from 'easy-peasy';
 
 const EventDetailsScreen = ({ navigation, route }) => {
-    const data = useStoreState((state) => state.events);
-    const getEvent = useStoreActions(actions => actions.getEvent)
     const [isPosterLoading, setIsPosterLoading] = useState(true);
     const [event, setEvent] = useState(null)
     const [venue, setVenue] = useState(null)
     const { itemId } = route.params;
     const { navigate } = useNavigation()
     const scrollRef = useRef()
-
+    const setTicketHeader = useStoreActions((actions) => actions.setTicketHeader);
 
     useEffect(() => {
-        let event = data.filter((item) => item.id === itemId)
-        setEvent(() => event[0])
-        // console.log(event)
         if (event) {
-            getVenue(event[0].venue)
-        }
-    }, [itemId, getVenue])
+            getVenue(event.venue)
+        } else getEvent(itemId)
+    }, [itemId, event])
 
+    const getEvent = useCallback(async (id) => {
+        let { data: Events, error } = await supabase
+            .from('Events')
+            .select('*')
+            .eq('id', id)
+        setEvent(Events[0]);
+        if (error) {
+            console.log("getEvents error: ", error)
+            return null
+        }
+    }, []);
 
     const getVenue = useCallback(async (id) => {
         let { data: Venue, error } = await supabase
             .from('Venue')
             .select('*')
             .eq('id', id)
-        if (Venue) setVenue(Venue[0])
-        // console.log(venue)
+        if (Venue) {
+            setVenue(Venue[0])
+            // console.log(Venue[0])
+        }
         if (error) {
             return null
         }
-    }, []);
+    }, [itemId]);
+
+    const handleBookBtn = () => {
+        navigation.navigate('Booking', { itemId: itemId })
+
+        setTicketHeader({
+            ticketHolder: 'Jason Bourne',
+            eventTitle: event.title,
+            eventId: event.id,
+            startDate: event.start_date,
+        });
+    }
 
 
     return (
@@ -82,7 +101,7 @@ const EventDetailsScreen = ({ navigation, route }) => {
                                 <Entypo name="calendar" size={24} color="black" />
                                 <View style={styles.textCon}>
                                     <Text style={{ fontWeight: 'bold' }}>{format(parseISO(event.start_date), "MMMM - dd - Y")}</Text>
-                                    <Text>Saturday, 4:00 PM - 10:00 PM</Text>
+                                    <Text>Saturday {event.start_time}</Text>
                                 </View>
                             </View>
 
@@ -137,11 +156,11 @@ const EventDetailsScreen = ({ navigation, route }) => {
                 </View>
 
 
-                <TouchableOpacity style={styles.bookBtn} onPress={() => navigation.navigate('Booking')}>
+                <TouchableOpacity style={styles.bookBtn} onPress={() => handleBookBtn()}>
                     <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18 }} >Book Ticket</Text>
                 </TouchableOpacity>
 
-                <Text style={styles.price}>${event?.price} /<Ionicons name='person' size={18} /> </Text>
+                <Text style={styles.price}>${event?.ticket_tiers[1].ticketPrice} /<Ionicons name='person' size={18} /> </Text>
 
             </Animatable.View>
         </SafeAreaView >

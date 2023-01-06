@@ -6,7 +6,7 @@ export default function Divider() {
         <View style={{
             borderWidth: 1,
             borderBottomWidth: 0,
-            marginVertical: 20,
+            marginVertical: 15,
             borderColor: '#999'
         }} />
     )
