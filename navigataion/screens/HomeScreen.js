@@ -16,10 +16,8 @@ const HomeScreen = ({ navigation }) => {
     const likedEvents = useStoreState((state) => state.likedEvents);
     const setLikedEvents = useStoreActions((actions) => actions.setLikedEvents);
     const featuredId = useStoreState((state) => state.featuredId);
-    const [featuredEvent, setFeaturedEvent] = useState({})
-    // const setFeaturedEvent = useStoreActions((actions) => actions.setFeaturedEvent);
-    const userId = session.user.identities[0].id
-    const [range, setRange] = useState(15)
+    const [featuredEvent, setFeaturedEvent] = useState({});
+    const userId = session.user.identities[0].id;
 
     useEffect(() => {
         getEvents()
