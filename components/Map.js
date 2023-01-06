@@ -51,6 +51,7 @@ const Map = ({ coordinates, title }) => {
         <View style={styles.container}>
             <MapView style={styles.map}
                 provider={PROVIDER_GOOGLE}
+                scrollEnabled={false}
                 // customMapStyle={mapStyle}
                 initialRegion={{
                     latitude: latitude,
