@@ -10,8 +10,9 @@ import TicketScreen from './screens/TicketScreen';
 const Stack = createStackNavigator();
 
 export default function HomeStack({ navigation, route }) {
+
     React.useLayoutEffect(() => {
-        const tabHiddenRoutes = ["EventDetails", "Booking", "Poster"];
+        const tabHiddenRoutes = ["EventDetails", "Booking", "Poster", 'Ticket'];
         const routeName = getFocusedRouteNameFromRoute(route);
 
         if (tabHiddenRoutes.includes(getFocusedRouteNameFromRoute(route))) {
