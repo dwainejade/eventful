@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, ImageBackground, ScrollView, FlatList, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, ImageBackground, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import QRCode from '../../components/QRCodeGenerator'
 import Divider from '../../components/Divider'
@@ -12,7 +12,6 @@ const TicketScreen = ({ navigation, route }) => {
     const ticketFooter = useStoreState((state) => state.ticketFooter)
     const tickets = useStoreState((state) => state.tickets)
     const setTickets = useStoreActions((actions) => actions.setTickets);
-    const [loading, setLoading] = useState(true)
 
     function createTickets() {
         let ticketObjects = [];
@@ -90,7 +89,7 @@ const TicketScreen = ({ navigation, route }) => {
 
                 <Divider />
             </View>
-            <QRCode ticketInfo={JSON.stringify(item)} size={200} setLoading={setLoading} />
+            <QRCode ticketInfo={JSON.stringify(item)} size={200} />
         </Animatable.View>
     );
 
@@ -98,7 +97,7 @@ const TicketScreen = ({ navigation, route }) => {
         <SafeAreaView style={styles.container}>
             <ImageBackground />
             <BackButton />
-            {loading && <ActivityIndicator />}
+
             <View style={styles.listCon}>
                 <FlatList
                     data={tickets}
