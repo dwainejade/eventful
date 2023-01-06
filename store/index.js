@@ -9,6 +9,10 @@ const store = createStore(
         likedEvents: [],
         searchResults: [],
         featuredId: [4733493, 6870586],
+        ticketHeader: {}, // persons details and event details
+        ticketFooter: {}, // ticket tiers and quantity
+        tickets: [], // includes the header plus the ticket details
+
         // auth session
         setSession: action((state, payload) => {
             state.session = payload
@@ -43,7 +47,18 @@ const store = createStore(
         }),
         setFeaturedId: action((state, payload) => {
             state.featuredId = payload
-        })
+        }),
+
+        // ticketInfo
+        setTicketHeader: action((state, payload) => {
+            state.ticketHeader = payload
+        }),
+        setTicketFooter: action((state, payload) => {
+            state.ticketFooter = payload
+        }),
+        setTickets: action((state, payload) => {
+            state.tickets = payload
+        }),
     }, {
         persistWhitelist: ['session']
     })
